@@ -1,0 +1,207 @@
+2026-02-01 17:48:18,337 - alpha_picks_manager.dashboard_data_loader - INFO - Using Local Repo DATABASE directory: D:\Stock Analysis\AP Dashboard\database
+2026-02-01 17:48:18,360 - alpha_picks_manager.dashboard_data_loader - INFO - Using Local Repo DATABASE directory: D:\Stock Analysis\AP Dashboard\database
+2026-02-01 17:48:18,372 - DeployPublic - INFO - Starting Public Deployment Sync (Deep Clone Mode)...
+2026-02-01 17:48:18,373 - DeployPublic - INFO - Loading dashboard data (Full Mode)...
+2026-02-01 17:48:18,374 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for BWA: market_price == avg_cost (44.99)
+2026-02-01 17:48:18,376 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for BWA: 48.43
+2026-02-01 17:48:18,376 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for MU: market_price == avg_cost (205.12)
+2026-02-01 17:48:18,378 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for MU: 414.88
+2026-02-01 17:48:18,379 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for APLD: market_price == avg_cost (32.19)
+2026-02-01 17:48:18,380 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for APLD: 41.35
+2026-02-01 17:48:18,381 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for ZETA: market_price == avg_cost (17.46)
+2026-02-01 17:48:18,382 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for ZETA: 20.01
+2026-02-01 17:48:18,383 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for MSTR: market_price == avg_cost (268.60)
+2026-02-01 17:48:18,385 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for MSTR: 161.58
+2026-02-01 17:48:18,386 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for UNFI: market_price == avg_cost (32.75)
+2026-02-01 17:48:18,388 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for UNFI: 37.23
+2026-02-01 17:48:18,389 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for HUT: market_price == avg_cost (38.36)
+2026-02-01 17:48:18,390 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for HUT: 61.84
+2026-02-01 17:48:18,391 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for UPWK: market_price == avg_cost (18.09)
+2026-02-01 17:48:18,392 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for UPWK: 21.30
+2026-02-01 17:48:18,392 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for GOOGL: market_price == avg_cost (185.45)
+2026-02-01 17:48:18,394 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for GOOGL: 334.55
+2026-02-01 17:48:18,394 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for HDLMY: market_price == avg_cost (45.75)
+2026-02-01 17:48:18,395 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for HDLMY: 57.79
+2026-02-01 17:48:18,396 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for GRFS: market_price == avg_cost (8.39)
+2026-02-01 17:48:18,398 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for GRFS: 9.29
+2026-02-01 17:48:18,399 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for BKTI: market_price == avg_cost (40.90)
+2026-02-01 17:48:18,401 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for BKTI: 78.99
+2026-02-01 17:48:18,401 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for WFC: market_price == avg_cost (82.73)
+2026-02-01 17:48:18,403 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for WFC: 90.49
+2026-02-01 17:48:18,403 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for TBLA: market_price == avg_cost (4.01)
+2026-02-01 17:48:18,405 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for TBLA: 4.12
+2026-02-01 17:48:18,406 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for TTMI: market_price == avg_cost (61.68)
+2026-02-01 17:48:18,407 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for TTMI: 98.20
+2026-02-01 17:48:18,408 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for PPC: market_price == avg_cost (42.92)
+2026-02-01 17:48:18,409 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for PPC: 43.37
+2026-02-01 17:48:18,410 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for PSIX: market_price == avg_cost (48.86)
+2026-02-01 17:48:18,412 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for PSIX: 74.01
+2026-02-01 17:48:18,412 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for MFC: market_price == avg_cost (31.05)
+2026-02-01 17:48:18,413 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for MFC: 38.11
+2026-02-01 17:48:18,414 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for CRDO: market_price == avg_cost (140.89)
+2026-02-01 17:48:18,416 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for CRDO: 125.28
+2026-02-01 17:48:18,416 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for SYF: market_price == avg_cost (75.57)
+2026-02-01 17:48:18,418 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for SYF: 72.63
+2026-02-01 17:48:18,418 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for TWLO: market_price == avg_cost (130.48)
+2026-02-01 17:48:18,420 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for TWLO: 120.46
+2026-02-01 17:48:18,421 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for FRSH: market_price == avg_cost (14.29)
+2026-02-01 17:48:18,422 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for FRSH: 11.59
+2026-02-01 17:48:18,423 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for DELL: market_price == avg_cost (124.65)
+2026-02-01 17:48:18,424 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for DELL: 114.66
+2026-02-01 17:48:18,425 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for URBN: market_price == avg_cost (68.56)
+2026-02-01 17:48:18,426 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for URBN: 69.98
+2026-02-01 17:48:18,426 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for RRGB: market_price == avg_cost (4.97)
+2026-02-01 17:48:18,427 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for RRGB: 3.87
+2026-02-01 17:48:18,428 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for URNJ: market_price == avg_cost (28.03)
+2026-02-01 17:48:18,429 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for URNJ: 36.57
+2026-02-01 17:48:18,430 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for LC: market_price == avg_cost (17.55)
+2026-02-01 17:48:18,431 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for LC: 16.91
+2026-02-01 17:48:18,431 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for INTA: market_price == avg_cost (49.40)
+2026-02-01 17:48:18,433 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for INTA: 36.80
+2026-02-01 17:48:18,434 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for W: market_price == avg_cost (109.10)
+2026-02-01 17:48:18,436 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for W: 103.49
+2026-02-01 17:48:18,438 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for KGC: market_price == avg_cost (22.33)
+2026-02-01 17:48:18,439 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for KGC: 31.56
+2026-02-01 17:48:18,440 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for SEZL: market_price == avg_cost (80.26)
+2026-02-01 17:48:18,441 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for SEZL: 67.84
+2026-02-01 17:48:18,442 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for NUTX: market_price == avg_cost (87.97)
+2026-02-01 17:48:18,443 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for NUTX: 153.81
+2026-02-01 17:48:18,443 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for MSTU: market_price == avg_cost (7.88)
+2026-02-01 17:48:18,445 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for MSTU: 8.96
+2026-02-01 17:48:18,446 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for HBM: market_price == avg_cost (21.81)
+2026-02-01 17:48:18,448 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for HBM: 26.24
+2026-02-01 17:48:18,449 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for GLXY: market_price == avg_cost (24.65)
+2026-02-01 17:48:18,450 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for GLXY: 33.18
+2026-02-01 17:48:18,451 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for GSL: market_price == avg_cost (35.54)
+2026-02-01 17:48:18,452 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for GSL: 37.20
+2026-02-01 17:48:18,453 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for LNVGY: market_price == avg_cost (27.39)
+2026-02-01 17:48:18,454 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for LNVGY: 22.93
+2026-02-01 17:48:18,455 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for KE: market_price == avg_cost (29.03)
+2026-02-01 17:48:18,456 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for KE: 29.68
+2026-02-01 17:48:18,457 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for VFF: market_price == avg_cost (3.10)
+2026-02-01 17:48:18,458 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for VFF: 3.40
+2026-02-01 17:48:18,458 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for ATGE: market_price == avg_cost (109.74)
+2026-02-01 17:48:18,460 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for ATGE: 103.55
+2026-02-01 17:48:18,460 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for UBER: market_price == avg_cost (89.99)
+2026-02-01 17:48:18,461 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for UBER: 80.05
+2026-02-01 17:48:18,462 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for GNW: market_price == avg_cost (8.61)
+2026-02-01 17:48:18,463 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for GNW: 8.24
+2026-02-01 17:48:18,464 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for QUBT: market_price == avg_cost (10.74)
+2026-02-01 17:48:18,465 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for QUBT: 11.31
+2026-02-01 17:48:18,466 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for INCY: market_price == avg_cost (105.49)
+2026-02-01 17:48:18,467 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for INCY: 100.07
+2026-02-01 17:48:18,468 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for EAT: market_price == avg_cost (140.62)
+2026-02-01 17:48:18,470 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for EAT: 157.72
+2026-02-01 17:48:18,471 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for PYPL: market_price == avg_cost (68.51)
+2026-02-01 17:48:18,472 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for PYPL: 52.69
+2026-02-01 17:48:18,473 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for PARR: market_price == avg_cost (40.68)
+2026-02-01 17:48:18,474 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for PARR: 37.74
+2026-02-01 17:48:18,475 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for SKYW: market_price == avg_cost (104.78)
+2026-02-01 17:48:18,476 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for SKYW: 96.52
+2026-02-01 17:48:18,477 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for RERE: market_price == avg_cost (4.84)
+2026-02-01 17:48:18,478 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for RERE: 5.81
+2026-02-01 17:48:18,478 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for DY: market_price == avg_cost (375.11)
+2026-02-01 17:48:18,479 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for DY: 374.87
+2026-02-01 17:48:18,480 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for CRNT: market_price == avg_cost (2.79)
+2026-02-01 17:48:18,481 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for CRNT: 2.31
+2026-02-01 17:48:18,484 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for HRTG: market_price == avg_cost (19.76)
+2026-02-01 17:48:18,485 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for HRTG: 25.40
+2026-02-01 17:48:18,486 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for POWL: market_price == avg_cost (208.82)
+2026-02-01 17:48:18,487 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for POWL: 443.59
+2026-02-01 17:48:18,487 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for CCL: market_price == avg_cost (30.33)
+2026-02-01 17:48:18,489 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for CCL: 30.02
+2026-02-01 17:48:18,489 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for CLS: market_price == avg_cost (246.10)
+2026-02-01 17:48:18,490 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for CLS: 280.99
+2026-02-01 17:48:18,491 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for WLDN: market_price == avg_cost (103.15)
+2026-02-01 17:48:18,492 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for WLDN: 126.20
+2026-02-01 17:48:18,493 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for GILT: market_price == avg_cost (12.04)
+2026-02-01 17:48:18,494 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for GILT: 19.22
+2026-02-01 17:48:18,494 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for TIGO: market_price == avg_cost (51.63)
+2026-02-01 17:48:18,496 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for TIGO: 61.03
+2026-02-01 17:48:18,497 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for HIMS: market_price == avg_cost (44.97)
+2026-02-01 17:48:18,498 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for HIMS: 29.68
+2026-02-01 17:48:18,498 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for GTX: market_price == avg_cost (17.72)
+2026-02-01 17:48:18,499 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for GTX: 18.34
+2026-02-01 17:48:18,500 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for B: market_price == avg_cost (44.14)
+2026-02-01 17:48:18,501 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for B: 45.79
+2026-02-01 17:48:18,502 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for OKTA: market_price == avg_cost (94.91)
+2026-02-01 17:48:18,503 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for OKTA: 84.48
+2026-02-01 17:48:18,504 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for NBIS: market_price == avg_cost (87.90)
+2026-02-01 17:48:18,505 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for NBIS: 97.87
+2026-02-01 17:48:18,505 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for EQT: market_price == avg_cost (51.30)
+2026-02-01 17:48:18,507 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for EQT: 54.41
+2026-02-01 17:48:18,507 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for ERO: market_price == avg_cost (31.22)
+2026-02-01 17:48:18,508 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for ERO: 35.38
+2026-02-01 17:48:18,509 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for AGX: market_price == avg_cost (260.47)
+2026-02-01 17:48:18,510 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for AGX: 347.11
+2026-02-01 17:48:18,511 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for BLBD: market_price == avg_cost (56.94)
+2026-02-01 17:48:18,512 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for BLBD: 50.31
+2026-02-01 17:48:18,513 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for APP: market_price == avg_cost (416.39)
+2026-02-01 17:48:18,514 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for APP: 473.11
+2026-02-01 17:48:18,514 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for ARQT: market_price == avg_cost (24.74)
+2026-02-01 17:48:18,515 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for ARQT: 25.37
+2026-02-01 17:48:18,516 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for INFU: market_price == avg_cost (10.20)
+2026-02-01 17:48:18,517 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for INFU: 8.48
+2026-02-01 17:48:18,518 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for ALL: market_price == avg_cost (201.07)
+2026-02-01 17:48:18,520 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for ALL: 198.99
+2026-02-01 17:48:18,520 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for CDE: market_price == avg_cost (17.01)
+2026-02-01 17:48:18,521 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for CDE: 20.44
+2026-02-01 17:48:18,522 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for SSRM: market_price == avg_cost (21.48)
+2026-02-01 17:48:18,523 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for SSRM: 22.83
+2026-02-01 17:48:18,524 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for VEON: market_price == avg_cost (53.89)
+2026-02-01 17:48:18,525 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for VEON: 54.11
+2026-02-01 17:48:18,525 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for TIGR: market_price == avg_cost (9.26)
+2026-02-01 17:48:18,526 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for TIGR: 8.81
+2026-02-01 17:48:18,527 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for CTMX: market_price == avg_cost (2.00)
+2026-02-01 17:48:18,528 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for CTMX: 5.93
+2026-02-01 17:48:18,529 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for SMCI: market_price == avg_cost (33.02)
+2026-02-01 17:48:18,530 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for SMCI: 31.20
+2026-02-01 17:48:18,531 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for EZPW: market_price == avg_cost (18.26)
+2026-02-01 17:48:18,532 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for EZPW: 21.45
+2026-02-01 17:48:18,533 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for QTWO: market_price == avg_cost (72.18)
+2026-02-01 17:48:18,534 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for QTWO: 65.14
+2026-02-01 17:48:18,534 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for STRL: market_price == avg_cost (312.86)
+2026-02-01 17:48:18,536 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for STRL: 357.91
+2026-02-01 17:48:18,536 - alpha_picks_manager.dashboard_data_loader - WARNING - Suspicious price for HCI: market_price == avg_cost (187.12)
+2026-02-01 17:48:18,537 - alpha_picks_manager.dashboard_data_loader - INFO - Fallback: Got DB snapshot price for HCI: 152.15
+2026-02-01 17:48:18,539 - alpha_picks_manager.dashboard_data_loader - INFO - Loaded Real Portfolio: 81 positions
+2026-02-01 17:48:18,540 - alpha_picks_manager.dashboard_data_loader - INFO - Checking for CURRENT portfolio in 5 possible paths...
+2026-02-01 17:48:18,540 - alpha_picks_manager.dashboard_data_loader - INFO - Checking path: D:\Stock Analysis\AP Dashboard\database\metadata\current_portfolio.json -> Exists: True
+2026-02-01 17:48:18,540 - alpha_picks_manager.dashboard_data_loader - INFO - Found CURRENT portfolio file at: D:\Stock Analysis\AP Dashboard\database\metadata\current_portfolio.json
+2026-02-01 17:48:18,541 - alpha_picks_manager.dashboard_data_loader - INFO - Loaded 45 positions from D:\Stock Analysis\AP Dashboard\database\metadata\current_portfolio.json
+2026-02-01 17:48:18,542 - alpha_picks_manager.dashboard_data_loader - INFO - Applied global deduplication: 40 tickers remain.
+2026-02-01 17:48:18,542 - alpha_picks_manager.dashboard_data_loader - INFO - Checking for CLOSED portfolio in 5 possible paths...
+2026-02-01 17:48:18,542 - alpha_picks_manager.dashboard_data_loader - INFO - Checking path: D:\Stock Analysis\AP Dashboard\database\metadata\closed_portfolio.json -> Exists: True
+2026-02-01 17:48:18,542 - alpha_picks_manager.dashboard_data_loader - INFO - Found CLOSED portfolio file at: D:\Stock Analysis\AP Dashboard\database\metadata\closed_portfolio.json
+2026-02-01 17:48:18,543 - alpha_picks_manager.dashboard_data_loader - INFO - Loaded 50 closed Alpha Picks from D:\Stock Analysis\AP Dashboard\database\metadata\closed_portfolio.json
+2026-02-01 17:48:18,543 - alpha_picks_manager.dashboard_data_loader - INFO - Converting current AP portfolio data (type: <class 'list'>) to DataFrame...
+2026-02-01 17:48:18,544 - alpha_picks_manager.dashboard_data_loader - INFO - Successfully converted 40 Alpha Picks to DataFrame
+2026-02-01 17:48:18,544 - alpha_picks_manager.dashboard_data_loader - INFO - Loaded Alpha Picks Model: 40 positions
+2026-02-01 17:48:18,555 - alpha_picks_manager.dashboard_data_loader - INFO - Merged 81 real and 40 alpha picks positions. Total: 87
+2026-02-01 17:48:18,555 - alpha_picks_manager.dashboard_data_loader - INFO - Loading data for 87 tickers using parallel processing...
+2026-02-01 17:48:35,224 - alpha_picks_manager.dashboard_data_loader - INFO - ✅ Loaded 87 tickers in 16.67s (parallel processing)
+2026-02-01 17:48:35,226 - DeployPublic - INFO - Loaded 87 tickers.
+2026-02-01 17:48:35,226 - alpha_picks_manager.dashboard_data_loader - INFO - Checking for CURRENT portfolio in 5 possible paths...
+2026-02-01 17:48:35,227 - alpha_picks_manager.dashboard_data_loader - INFO - Checking path: D:\Stock Analysis\AP Dashboard\database\metadata\current_portfolio.json -> Exists: True
+2026-02-01 17:48:35,227 - alpha_picks_manager.dashboard_data_loader - INFO - Found CURRENT portfolio file at: D:\Stock Analysis\AP Dashboard\database\metadata\current_portfolio.json
+2026-02-01 17:48:35,228 - alpha_picks_manager.dashboard_data_loader - INFO - Loaded 45 positions from D:\Stock Analysis\AP Dashboard\database\metadata\current_portfolio.json
+2026-02-01 17:48:35,228 - alpha_picks_manager.dashboard_data_loader - INFO - Applied global deduplication: 40 tickers remain.
+2026-02-01 17:48:35,228 - alpha_picks_manager.dashboard_data_loader - INFO - Checking for CLOSED portfolio in 5 possible paths...
+2026-02-01 17:48:35,228 - alpha_picks_manager.dashboard_data_loader - INFO - Checking path: D:\Stock Analysis\AP Dashboard\database\metadata\closed_portfolio.json -> Exists: True
+2026-02-01 17:48:35,229 - alpha_picks_manager.dashboard_data_loader - INFO - Found CLOSED portfolio file at: D:\Stock Analysis\AP Dashboard\database\metadata\closed_portfolio.json
+2026-02-01 17:48:35,229 - alpha_picks_manager.dashboard_data_loader - INFO - Loaded 50 closed Alpha Picks from D:\Stock Analysis\AP Dashboard\database\metadata\closed_portfolio.json
+2026-02-01 17:48:35,229 - alpha_picks_manager.dashboard_data_loader - INFO - Converting current AP portfolio data (type: <class 'list'>) to DataFrame...
+2026-02-01 17:48:35,230 - alpha_picks_manager.dashboard_data_loader - INFO - Successfully converted 40 Alpha Picks to DataFrame
+2026-02-01 17:48:35,233 - DeployPublic - INFO - Generating Focus List View Model...
+2026-02-01 17:48:35,259 - DeployPublic - INFO - Generating Table View Model...
+2026-02-01 17:48:35,259 - alpha_picks_manager.dashboard_data_loader - INFO - Checking for CURRENT portfolio in 5 possible paths...
+2026-02-01 17:48:35,259 - alpha_picks_manager.dashboard_data_loader - INFO - Checking path: D:\Stock Analysis\AP Dashboard\database\metadata\current_portfolio.json -> Exists: True
+2026-02-01 17:48:35,260 - alpha_picks_manager.dashboard_data_loader - INFO - Found CURRENT portfolio file at: D:\Stock Analysis\AP Dashboard\database\metadata\current_portfolio.json
+2026-02-01 17:48:35,261 - alpha_picks_manager.dashboard_data_loader - INFO - Loaded 45 positions from D:\Stock Analysis\AP Dashboard\database\metadata\current_portfolio.json
+2026-02-01 17:48:35,261 - alpha_picks_manager.dashboard_data_loader - INFO - Applied global deduplication: 40 tickers remain.
+2026-02-01 17:48:35,261 - alpha_picks_manager.dashboard_data_loader - INFO - Checking for CLOSED portfolio in 5 possible paths...
+2026-02-01 17:48:35,261 - alpha_picks_manager.dashboard_data_loader - INFO - Checking path: D:\Stock Analysis\AP Dashboard\database\metadata\closed_portfolio.json -> Exists: True
+2026-02-01 17:48:35,261 - alpha_picks_manager.dashboard_data_loader - INFO - Found CLOSED portfolio file at: D:\Stock Analysis\AP Dashboard\database\metadata\closed_portfolio.json
+2026-02-01 17:48:35,262 - alpha_picks_manager.dashboard_data_loader - INFO - Loaded 50 closed Alpha Picks from D:\Stock Analysis\AP Dashboard\database\metadata\closed_portfolio.json
+2026-02-01 17:48:35,290 - DeployPublic - INFO - Snapshot written to D:\Stock Analysis\AP_Public_View\data\snapshot.json
+2026-02-01 17:48:35,290 - DeployPublic - INFO - DEPLOYMENT SYNC COMPLETE.

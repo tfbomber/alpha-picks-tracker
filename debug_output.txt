@@ -1,0 +1,24 @@
+--- Database Check ---
+DB Connection: <sqlite3.Connection object at 0x00000275C76A3C40>
+DB List: [<sqlite3.Row object at 0x00000275C77EC0D0>]
+Total Audit Rows: 53
+Latest Audit Date: 2026-01-31
+
+--- Audit Results (Python API) ---
+Latest Batch Count: 8
+Sample Keys: ['ALL', 'APP', 'CRDO']
+
+--- Trigger Events ---
+Loading Dashboard Data...
+Triggers DF Shape: (19, 8)
+Columns: ['priority', 'ticker', 'trigger_type', 'details', 'current_price', 'key_level', 'keywords', 'comments']
+  priority ticker  trigger_type                                            details  current_price key_level   keywords comments
+0        🔥    AGX     SELL Rule                                   SELL (Hold>195d)     347.109985       N/A  Downtrend         
+1        🔥     LC     SELL Rule                                   SELL (Hold>182d)      16.910000       N/A  Downtrend         
+2        🔥   PYPL  SELL Rule +1  SELL (Hold>187d) | Earnings in 2 days: 2026-02-03      52.689999       N/A  Downtrend         
+3       ⚠️    ALL   Earnings 7D                     Earnings in 3 days: 2026-02-04     198.990005       N/A  Downtrend         
+4       ⚠️    APP      Gap Down                                    Gap down -16.9%     473.109985       N/A  Downtrend         
+
+--- Final Logic Emulation ---
+Execution Map Items: 8
+Debug Complete.

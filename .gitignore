@@ -1,0 +1,4 @@
+secrets.toml
+*.csv
+__pycache__/
+.env
