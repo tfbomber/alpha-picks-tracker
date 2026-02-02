@@ -22,7 +22,7 @@ def is_mobile_device():
     # Helper to get User Agent via JS
     ua = st_javascript("navigator.userAgent")
     if not ua:
-        return False # Default to Desktop if undetected
+        return None # Return None to indicate "Loading/Unknown" - Do not default to False yet!
     mobile_keywords = ['Android', 'webOS', 'iPhone', 'iPad', 'iPod', 'BlackBerry', 'Windows Phone']
     return any(keyword in ua for keyword in mobile_keywords)
 
@@ -147,8 +147,12 @@ def main():
         # We use session_state to hold the "auto-detected" preference once.
         if "first_load" not in st.session_state:
             is_mobile = is_mobile_device()
-            st.session_state.mobile_view = is_mobile
-            st.session_state.first_load = True
+            # Only finalize state if we got a valid detection result (True/False), not None
+            if is_mobile is not None:
+                st.session_state.mobile_view = is_mobile
+                st.session_state.first_load = True
+            # If is_mobile is None, we do nothing this run. 
+            # Streamlit will likely rerun when st_javascript returns the value.
         
         use_mobile = st.toggle("📱 View", value=st.session_state.get("mobile_view", False), key="mobile_view_toggle")
         # Update session state if toggled
