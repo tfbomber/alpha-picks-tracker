@@ -4,7 +4,6 @@ import json
 import os
 import re
 import html
-import html
 from datetime import datetime
 from streamlit_javascript import st_javascript
 
@@ -32,6 +31,16 @@ def render_mobile_cards(df):
         st.info("No Active Picks")
         return
 
+    def coerce_float(value):
+        if value is None:
+            return None
+        if isinstance(value, str) and not value.strip():
+            return None
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
+
     # Iterate rows
     for index, row in df.iterrows():
         # Prepare Data
@@ -39,13 +48,22 @@ def render_mobile_cards(df):
         # Check if ticker is masked logic or raw string
         # (Assuming 'ticker' col is already masked in main, but let's be safe)
         
-        price = row.get('price', 0)
-        day_pct = row.get('Day%', 0)
+        price_value = coerce_float(row.get('price'))
+        day_pct_value = coerce_float(row.get('Day%'))
         signal = row.get('quant', 'Hold') # Using 'quant' emoji as signal or raw text
-        
+
+        if price_value is None:
+            price_display = "N/A"
+        else:
+            price_display = f"${price_value:.2f}"
+
         # Color Logic for Day%
-        pct_color = "#10b981" if day_pct >= 0 else "#ef4444"
-        pct_str = f"{day_pct:+.2f}%"
+        if day_pct_value is None:
+            pct_color = "#64748b"
+            pct_str = "N/A"
+        else:
+            pct_color = "#10b981" if day_pct_value >= 0 else "#ef4444"
+            pct_str = f"{day_pct_value:+.2f}%"
 
         # Grades Visuals
         val = row.get('value_grade', '-')
@@ -58,7 +76,7 @@ def render_mobile_cards(df):
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <div>
                     <span style="font-size: 1.2rem; font-weight: 700; color: #1e293b;">{ticker}</span>
-                    <div style="font-size: 0.85rem; color: #64748b;">${price:.2f}</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">{price_display}</div>
                 </div>
                 <div style="text-align: right;">
                      <div style="font-size: 1rem; font-weight: 600; color: {pct_color};">{pct_str}</div>
@@ -126,10 +144,6 @@ def mask_ticker(ticker: str) -> str:
 def main():
     data = load_data()
     if not data:
-
-def main():
-    data = load_data()
-    if not data:
         st.error("System Offline: Snapshot missing.")
         return
 
@@ -151,6 +165,7 @@ def main():
             if is_mobile is not None:
                 st.session_state.mobile_view = is_mobile
                 st.session_state.first_load = True
+                st.rerun()
             # If is_mobile is None, we do nothing this run. 
             # Streamlit will likely rerun when st_javascript returns the value.
         
