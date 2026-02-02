@@ -95,25 +95,71 @@ def render_mobile_cards(df):
         rev = row.get('eps_revisions_grade', '-')
         
         # Tech & Stats (Mini Summary)
-        # RSI 60 · Vol 1.1x · EMA21 175.5 · SMA200 150
-        rsi = row.get('rsi14', '-')
-        vol = row.get('vol', '-')
-        ema21 = row.get('ema21', '-')
-        sma200 = row.get('sma200', '-')
+        # Goal: RSI 60.00 · Vol 1.15x · :green[>E21] · :red[<S200]
         
-        tech_line = f"RSI {rsi} · Vol {vol}x · E21 {ema21} · S200 {sma200}"
+        # 1. Helper for safe float
+        def format_float(val, precision=2):
+            try:
+                f_val = float(val)
+                return f"{f_val:.{precision}f}"
+            except (TypeError, ValueError):
+                return "-"
+
+        rsi_val = format_float(row.get('rsi14', '-'))
+        vol_val = format_float(row.get('vol', '-'))
+        atr_pct = format_float(row.get('atr14_pct', '-')) # Not in mini summary but needed for logic if added
+        
+        # 2. Trend Logic
+        # Need raw float for comparison
+        raw_price = price_value # already float or None
+        
+        def safe_float(v):
+             try: return float(v)
+             except: return None
+             
+        raw_e21 = safe_float(row.get('ema21'))
+        raw_s200 = safe_float(row.get('sma200'))
+        
+        trend_tags = []
+        if raw_price is not None:
+             if raw_e21 is not None:
+                 if raw_price > raw_e21: trend_tags.append(":green[>E21]")
+                 else: trend_tags.append(":red[<E21]")
+             
+             if raw_s200 is not None:
+                 if raw_price > raw_s200: trend_tags.append(":green[>S200]")
+                 else: trend_tags.append(":red[<S200]")
+        
+        trend_str = " · ".join(trend_tags) if trend_tags else "Trend N/A"
+        
+        tech_line = f"RSI {rsi_val} · Vol {vol_val}x · {trend_str}"
 
         # Earnings: 2024-04-25 · Hold: 45d
         earning = row.get('earnings', '-')
         streak = row.get('hold_streak_days', '-')
         stats_line = f"Earn: {earning} · Hold: {streak}d"
+        
+        # Picked Date Formatting (Shorten: 2024-01-15 -> 01/15/24)
+        pick_raw = row.get('picked_date', '')
+        pick_display = ""
+        if pick_raw:
+             try:
+                 # Try parse YYYY-MM-DD
+                 d_obj = datetime.strptime(str(pick_raw).strip(), "%Y-%m-%d")
+                 pick_display = d_obj.strftime("%m/%d/%y")
+             except:
+                 pick_display = str(pick_raw)
 
         # --- Render Card (Native) ---
         with st.container(border=True):
             # Row 1: Ticker | Day%
             c1, c2 = st.columns([0.65, 0.35])
             with c1:
-                st.markdown(f"**{ticker}**")
+                # Ticker + faint Date
+                if pick_display:
+                    st.markdown(f"**{ticker}** <span style='font-size:0.8em; color:#64748b'> · {pick_display}</span>", unsafe_allow_html=True)
+                else:
+                    st.markdown(f"**{ticker}**")
             with c2:
                 st.markdown(f"<div style='text-align: right'>{day_comp_str}</div>", unsafe_allow_html=True)
             
