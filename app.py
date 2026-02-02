@@ -26,16 +26,34 @@ def is_mobile_device():
     return any(keyword in ua for keyword in mobile_keywords)
 
 def render_mobile_cards(df):
-    """Renders the Portfolio DataFrame as a vertical list of HTML Cards"""
+    """Renders the Portfolio DataFrame as a vertical list of Native Streamlit Containers"""
     if df is None or df.empty:
         st.info("No Active Picks")
         return
 
+    # --- Controls ---
+    c_filter, c_sort = st.columns([0.6, 0.4])
+    with c_filter:
+        filter_txt = st.text_input("Filter Ticker", key="mob_filter", placeholder="e.g. NVDA")
+    with c_sort:
+        sort_opt = st.selectbox("Sort By", ["Day% Desc", "Ticker A-Z", "Hold Desc"], key="mob_sort", label_visibility="collapsed")
+
+    # --- Logic ---
+    # 1. Filter
+    if filter_txt:
+        df = df[df['ticker'].str.contains(filter_txt.upper(), na=False)]
+    
+    # 2. Sort
+    if sort_opt == "Day% Desc":
+        df = df.sort_values(by="Day%", ascending=False)
+    elif sort_opt == "Ticker A-Z":
+        df = df.sort_values(by="ticker", ascending=True)
+    elif sort_opt == "Hold Desc":
+        df = df.sort_values(by="hold_streak_days", ascending=False)
+
     def coerce_float(value):
-        if value is None:
-            return None
-        if isinstance(value, str) and not value.strip():
-            return None
+        if value is None: return None
+        if isinstance(value, str) and not value.strip(): return None
         try:
             return float(value)
         except (TypeError, ValueError):
@@ -45,66 +63,75 @@ def render_mobile_cards(df):
     for index, row in df.iterrows():
         # Prepare Data
         ticker = row.get('ticker', 'N/A')
-        # Check if ticker is masked logic or raw string
-        # (Assuming 'ticker' col is already masked in main, but let's be safe)
+        price_val = coerce_float(row.get('price'))
+        day_pct = coerce_float(row.get('Day%'))
+        quant_emoji = row.get('quant', 'Hold')
         
-        price_value = coerce_float(row.get('price'))
-        day_pct_value = coerce_float(row.get('Day%'))
-        signal = row.get('quant', 'Hold') # Using 'quant' emoji as signal or raw text
-
-        if price_value is None:
-            price_display = "N/A"
+        # Display logic
+        price_disp = f"${price_val:.2f}" if price_val is not None else "N/A"
+        
+        if day_pct is None:
+            day_disp = "N/A"
+            pct_color = "gray" # Not used in native caption, but logic placeholder
         else:
-            price_display = f"${price_value:.2f}"
+            # Emoji for sign
+            sign_emoji = "🟢" if day_pct >= 0 else "🔴"
+            day_disp = f"{day_pct:+.2f}% {sign_emoji}"
 
-        # Color Logic for Day%
-        if day_pct_value is None:
-            pct_color = "#64748b"
-            pct_str = "N/A"
-        else:
-            pct_color = "#10b981" if day_pct_value >= 0 else "#ef4444"
-            pct_str = f"{day_pct_value:+.2f}%"
+        # Grades
+        g_val = row.get('value_grade', '-')
+        g_gro = row.get('growth_grade', '-')
+        g_mom = row.get('momentum_grade', '-')
 
-        # Grades Visuals
-        val = row.get('value_grade', '-')
-        gro = row.get('growth_grade', '-')
-        mom = row.get('momentum_grade', '-')
+        # Tech & Stats (Mini Summary)
+        # RSI 60 · Vol 1.1x · EMA21 175.5 · SMA200 150
+        rsi = row.get('rsi14', '-')
+        vol = row.get('vol', '-')
+        ema21 = row.get('ema21', '-')
+        sma200 = row.get('sma200', '-')
         
-        # Card HTML
-        card_html = f"""
-        <div class="mobile-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <div>
-                    <span style="font-size: 1.2rem; font-weight: 700; color: #1e293b;">{ticker}</span>
-                    <div style="font-size: 0.85rem; color: #64748b;">{price_display}</div>
-                </div>
-                <div style="text-align: right;">
-                     <div style="font-size: 1rem; font-weight: 600; color: {pct_color};">{pct_str}</div>
-                     <div style="font-size: 0.8rem; color: #64748b;">{signal}</div>
-                </div>
-            </div>
-            <div style="display: flex; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 8px; font-size: 0.8rem;">
-                <span>Val: <b>{val}</b></span>
-                <span>Gro: <b>{gro}</b></span>
-                <span>Mom: <b>{mom}</b></span>
-            </div>
-        </div>
-        """
-        st.markdown(card_html, unsafe_allow_html=True)
-        
-        # Expandable Details
-        with st.expander("Details", expanded=False):
-            c1, c2 = st.columns(2)
+        tech_line = f"RSI {rsi} · Vol {vol}x · E21 {ema21} · S200 {sma200}"
+
+        # Earnings: 2024-04-25 · Hold: 45d
+        earning = row.get('earnings', '-')
+        streak = row.get('hold_streak_days', '-')
+        stats_line = f"Earn: {earning} · Hold: {streak}d"
+
+        # --- Render Card (Native) ---
+        with st.container(border=True):
+            # Row 1: Header
+            c1, c2 = st.columns([0.65, 0.35])
             with c1:
-                st.caption("Technical")
-                st.write(f"RSI: {row.get('rsi14', '-')}")
-                st.write(f"Vol Ratio: {row.get('vol', '-')}")
+                st.markdown(f"**{ticker}** <span style='color:gray; font-size:0.9em'>{price_disp}</span>", unsafe_allow_html=True)
             with c2:
-                st.caption("Trend")
-                st.write(f"EMA21: {row.get('ema21', '-')}")
-                st.write(f"SMA200: {row.get('sma200', '-')}")
-            st.caption(f"Earnings: {row.get('earnings', '-')}")
-            st.caption(f"Streak: {row.get('hold_streak_days', '-')} Days")
+                st.caption(f"{day_disp} {quant_emoji}")
+            
+            # Row 2: Grades (Compact) - using columns for spacing
+            gc1, gc2, gc3 = st.columns(3)
+            gc1.caption(f"Val: **{g_val}**")
+            gc2.caption(f"Gro: **{g_gro}**")
+            gc3.caption(f"Mom: **{g_mom}**")
+            
+            # Row 3 & 4: Mini Summaries
+            st.caption(tech_line)
+            st.caption(stats_line)
+            
+            # Expander: Full Details
+            with st.expander("Details"):
+                ec1, ec2 = st.columns(2)
+                with ec1:
+                   st.caption("**Technical**")
+                   st.write(f"RSI: {rsi}")
+                   st.write(f"Vol Ratio: {vol}")
+                   st.write(f"ATR%: {row.get('atr14_pct', '-')}")
+                with ec2:
+                   st.caption("**Trend**")
+                   st.write(f"EMA21: {ema21}")
+                   st.write(f"EMA55: {row.get('ema55', '-')}")
+                   st.write(f"SMA200: {sma200}")
+                
+                st.write(f"**Earnings**: {earning}")
+                st.write(f"**Hold Streak**: {streak} Days")
 
 
 # Path Resolution
@@ -191,54 +218,88 @@ def main():
         # --- Responsive Focus List ---
         # If Mobile: Vertical Stack. If Desktop: 4 Columns.
         if st.session_state.mobile_view:
-             # Vertical Stack for Mobile
-            for i, item in enumerate(focus_items):
-                # Render item logic (Extract for reuse or duplicate carefully)
-                # ... (Duplication for safety and minor UI tweaks) ...
-                
-                verdict = item.get('verdict', 'WATCH')
-                ticker = item.get('ticker')
-                picked_date = item.get('picked_date')
-                reason = item.get('reason', '')
-                urgency_val = item.get('urgency')
-                signal = item.get('signal') or '—'
-                news = item.get('news') or '—'
-                is_selected = (ticker == st.session_state.focus_selected)
+             # --- Mobile Focus Navigator ---
+             st.markdown("### Focus Navigator")
+             
+             # 1. Prepare Selectbox Options
+             # Format: "AGX 🟢 BUY · U9.5 · Trend Cont..."
+             options = []
+             ticker_map = {}
+             
+             for item in focus_items:
+                 t = item.get('ticker')
+                 if not t: continue
+                 
+                 v = item.get('verdict', 'WATCH')
+                 urg = item.get('urgency', 0.0)
+                 sig = item.get('signal', 'N/A')
+                 p_date = item.get('picked_date', '')
+                 
+                 # Urgency Formatting
+                 try:
+                     u_val = float(urg)
+                     u_str = f"U{u_val:.1f}"
+                 except:
+                     u_str = f"U{urg}"
 
-                # Urgency Format
-                if urgency_val is None:
-                    urgency_str = "N/A"
-                else:
-                    try:
-                        urgency_float = float(urgency_val)
-                        if urgency_float == 0.0 and "Excluded" in str(reason):
-                            urgency_str = "Excluded"
-                        else:
-                            urgency_str = f"{urgency_float:.1f}"
-                    except (TypeError, ValueError):
-                        urgency_str = str(urgency_val)
+                 # Emoji for Verdict
+                 v_icon = "🟢" if "BUY" in str(v).upper() else "👀"
+                 
+                 # Construct Label
+                 # Truncate signal if too long
+                 sig_short = (sig[:15] + '..') if len(sig) > 15 else sig
+                 
+                 label = f"{t} {v_icon} {v} · {u_str} · {sig_short}"
+                 options.append(label)
+                 ticker_map[label] = t
+            
+             # 2. State Management for Selectbox
+             # Find current selection index
+             current_ticker = st.session_state.focus_selected
+             default_index = 0
+             
+             # Reverse lookup for index
+             for i, opt in enumerate(options):
+                 if ticker_map.get(opt) == current_ticker:
+                     default_index = i
+                     break
+            
+             selected_label = st.selectbox(
+                 "Select Ticker to Deep Dive",
+                 options=options,
+                 index=default_index,
+                 key="focus_navigator_mobile",
+                 label_visibility="collapsed"
+             )
+             
+             # Update State immediately
+             if selected_label:
+                 st.session_state.focus_selected = ticker_map[selected_label]
 
-                # Container
-                with st.container(border=True):
-                     c_info, c_btn = st.columns([0.7, 0.3])
-                     with c_info:
-                        picked_display = str(picked_date).strip() if picked_date else "N/A"
-                        ticker_value = str(ticker).strip() if ticker else ""
-                        if ticker_value:
-                            star_count = max(1, len(ticker_value) - 1)
-                            display_core = f"{ticker_value[0]}{'*' * star_count}"
-                        else:
-                            display_core = "N/A"
-                        
-                        st.markdown(f"**{display_core}** | {verdict}")
-                        st.caption(f"Urgency {urgency_str} | {signal}")
+             # 3. Now Viewing Anchor
+             # "One glance" summary container
+             selected_item = next((i for i in focus_items if i['ticker'] == st.session_state.focus_selected), None)
+             
+             if selected_item:
+                 with st.container(border=True):
+                     # Top Row: Ticker + Verdict
+                     t_str = selected_item.get('ticker')
+                     v_str = selected_item.get('verdict')
+                     u_raw = selected_item.get('urgency')
+                     s_raw = selected_item.get('signal')
+                     d_raw = selected_item.get('picked_date')
                      
-                     with c_btn:
-                        btn_type = "primary" if is_selected else "secondary"
-                        # Use a unique key ensures state tracking
-                        if st.button("Select", key=f"mob_btn_{ticker}_{i}", use_container_width=True, type=btn_type):
-                            st.session_state.focus_selected = ticker
-                            st.rerun()
+                     st.markdown(f"**{t_str}**  |  {v_str}")
+                     st.caption(f"Urgency {u_raw} · {s_raw} · {d_raw}")
+
+             # Optional: Scan List Expander
+             with st.expander("Show Full Focus List (Scan Mode)"):
+                 for item in focus_items:
+                     it_t = item.get('ticker')
+                     it_v = item.get('verdict')
+                     it_u = item.get('urgency')
+                     st.caption(f"**{it_t}** ({it_v}) - Urgency {it_u}")
+
 
         else:
             # Standard Desktop 4-Column Grid
@@ -292,57 +353,83 @@ def main():
                             st.session_state.focus_selected = ticker
                             st.rerun()
 
-        # --- Detail Panel ---
+        # --- Deep Dive (Execution Dashboard) ---
         st.divider()
-        st.markdown("### Detail Panel")
+        # st.markdown("### Detail Panel") # Removed header to save space on mobile? Or keep for clarity? User said "Deep Dive".
         
         selected_ticker = st.session_state.focus_selected
         selected_item = next((item for item in focus_items if item['ticker'] == selected_ticker), None)
         
         if selected_item:
-            st.markdown("**Facts**")
             td = selected_item.get('trigger_details', {})
-            st.caption(f"Signal: {td.get('trigger_type', 'N/A')}")
-            st.caption(
-                f"Price: ${float(td.get('current_price') or 0):.2f} | "
-                f"Key Level: {td.get('key_level', 'N/A')}"
-            )
-
-            details_text = td.get('details', '')
-            if details_text:
-                st.text_area("Facts", value=str(details_text), height=100)
-            else:
-                st.caption("No trigger facts available for this ticker")
-
-            st.markdown("**AI Judgement**")
             logic = selected_item.get('logic_pillars', {})
+            
+            # --- A) Setup Card ---
+            with st.container(border=True):
+                trig_type = td.get('trigger_type', 'N/A')
+                st.markdown(f"**Setup** · {trig_type}")
+                
+                # Metrics
+                curr_price = float(td.get('current_price') or 0)
+                try:
+                    key_lvl = float(td.get('key_level', 0))
+                except:
+                    key_lvl = 0.0
+                
+                delta_val = curr_price - key_lvl
+                if key_lvl > 0:
+                    delta_pct = (delta_val / key_lvl) * 100
+                    delta_str = f"{delta_val:+.2f} ({delta_pct:+.1f}%)"
+                else:
+                    delta_str = "N/A"
+                
+                c1, c2, c3 = st.columns(3)
+                c1.metric("Price", f"${curr_price:.2f}")
+                c2.metric("Key Lvl", f"${key_lvl:.2f}")
+                c3.metric("Δ vs Key", delta_str)
+                
+                # Setup Details
+                raw_details = str(td.get('details', 'No details available.'))
+                # 200 char summary
+                summary_details = (raw_details[:200] + '...') if len(raw_details) > 200 else raw_details
+                st.caption(summary_details)
+                if len(raw_details) > 200:
+                    with st.expander("Show full setup details"):
+                        st.write(raw_details)
 
-            # Check if logic actually contains data
-            if logic and any(logic.values()):
-                # Helper to clean text
-                def clean_text(text):
-                    cleaned = strip_evidence_refs(str(text)) if text is not None else ""
-                    return cleaned or "N/A"
+            # --- B) Action Plan Card ---
+            action_raw = selected_item.get('action_plan') or logic.get('action_plan')
+            if action_raw:
+                action_clean = strip_evidence_refs(str(action_raw))
+                with st.container(border=True):
+                    st.markdown("**AI Judgement** · Action Plan")
+                    
+                    act_summary = (action_clean[:250] + '...') if len(action_clean) > 250 else action_clean
+                    st.write(act_summary)
+                    
+                    if len(action_clean) > 250:
+                        with st.expander("Show full Action Plan"):
+                            st.write(action_clean)
 
-                tech = clean_text(logic.get('technical'))
-                vol = clean_text(logic.get('volume_analysis'))
-                news_catalyst = clean_text(logic.get('news_catalyst'))
-                action = clean_text(selected_item.get('action_plan'))
-                divergence = clean_text(selected_item.get('divergence'))
+            # --- C) Logic Pillars (Tabs) ---
+            t_tech, t_vol, t_news, t_div = st.tabs(["Technical", "Volume", "News", "Divergence"])
+            
+            def clean_text_safe(val):
+                if not val: return "N/A"
+                return strip_evidence_refs(str(val))
 
-                st.caption(f"Technical: {tech}")
-                st.caption(f"Volume: {vol}")
-                st.caption(f"News: {news_catalyst}")
-
-                if divergence and divergence != "N/A":
-                    st.caption(f"Divergence: {divergence}")
-
-                if action and action != "N/A":
-                    if len(action) > 140:
-                        action = action[:137] + "..."
-                    st.caption(f"Action Plan: {action}")
-            else:
-                st.caption("No execution audit data saved for this ticker")
+            with t_tech:
+                st.write(clean_text_safe(logic.get('technical')))
+            with t_vol:
+                st.write(clean_text_safe(logic.get('volume_analysis')))
+            with t_news:
+                st.write(clean_text_safe(logic.get('news_catalyst')))
+            with t_div:
+                div_val = selected_item.get('divergence')
+                st.write(clean_text_safe(div_val))
+            
+        else:
+            st.info("Select a ticker to view details.")
 
     else:
         # Dynamic Message from Snapshot
