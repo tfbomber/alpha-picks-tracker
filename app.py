@@ -63,26 +63,37 @@ def render_mobile_cards(df):
     for index, row in df.iterrows():
         # Prepare Data
         ticker = row.get('ticker', 'N/A')
-        price_val = coerce_float(row.get('price'))
-        day_pct = coerce_float(row.get('Day%'))
-        quant_emoji = row.get('quant', 'Hold')
+        # Check if ticker is masked logic or raw string
+        # (Assuming 'ticker' col is already masked in main, but let's be safe)
         
-        # Display logic
-        price_disp = f"${price_val:.2f}" if price_val is not None else "N/A"
-        
-        if day_pct is None:
-            day_disp = "N/A"
-            pct_color = "gray" # Not used in native caption, but logic placeholder
+        price_value = coerce_float(row.get('price'))
+        day_pct_value = coerce_float(row.get('Day%'))
+        signal = row.get('quant', 'Hold') # Using 'quant' emoji as signal or raw text
+
+        if price_value is None:
+            price_display = "N/A"
         else:
-            # Emoji for sign
-            sign_emoji = "🟢" if day_pct >= 0 else "🔴"
-            day_disp = f"{day_pct:+.2f}% {sign_emoji}"
+            price_display = f"${price_value:.2f}"
 
-        # Grades
-        g_val = row.get('value_grade', '-')
-        g_gro = row.get('growth_grade', '-')
-        g_mom = row.get('momentum_grade', '-')
+        # Color Logic for Day%
+        if day_pct_value is None:
+            pct_color = "gray"
+            pct_str = "N/A"
+            day_comp_str = "N/A"
+        else:
+            # Enhanced visual: text color instead of emoji icon
+            if day_pct_value >= 0:
+                day_comp_str = f":green[{day_pct_value:+.2f}%]"
+            else:
+                day_comp_str = f":red[{day_pct_value:+.2f}%]"
 
+        # Grades Visuals (Moved to Details, but fetched here)
+        val = row.get('value_grade', '-')
+        gro = row.get('growth_grade', '-')
+        mom = row.get('momentum_grade', '-')
+        pro = row.get('profitability_grade', '-')
+        rev = row.get('eps_revisions_grade', '-')
+        
         # Tech & Stats (Mini Summary)
         # RSI 60 · Vol 1.1x · EMA21 175.5 · SMA200 150
         rsi = row.get('rsi14', '-')
@@ -99,25 +110,37 @@ def render_mobile_cards(df):
 
         # --- Render Card (Native) ---
         with st.container(border=True):
-            # Row 1: Header
+            # Row 1: Ticker | Day%
             c1, c2 = st.columns([0.65, 0.35])
             with c1:
-                st.markdown(f"**{ticker}** <span style='color:gray; font-size:0.9em'>{price_disp}</span>", unsafe_allow_html=True)
+                st.markdown(f"**{ticker}**")
             with c2:
-                st.caption(f"{day_disp} {quant_emoji}")
+                st.markdown(f"<div style='text-align: right'>{day_comp_str}</div>", unsafe_allow_html=True)
             
-            # Row 2: Grades (Compact) - using columns for spacing
-            gc1, gc2, gc3 = st.columns(3)
-            gc1.caption(f"Val: **{g_val}**")
-            gc2.caption(f"Gro: **{g_gro}**")
-            gc3.caption(f"Mom: **{g_mom}**")
-            
+            # Row 2: Price | Quant (Split to ensure clean separation)
+            c3, c4 = st.columns([0.65, 0.35])
+            with c3:
+                 st.caption(f"{price_display}")
+            with c4:
+                 st.markdown(f"<div style='text-align: right'>{signal}</div>", unsafe_allow_html=True)
+
             # Row 3 & 4: Mini Summaries
             st.caption(tech_line)
             st.caption(stats_line)
             
             # Expander: Full Details
             with st.expander("Details"):
+                # Grades Section
+                st.caption("**Factor Grades**")
+                g1, g2, g3, g4, g5 = st.columns(5)
+                g1.write(f"Val\n**{val}**")
+                g2.write(f"Gro\n**{gro}**")
+                g3.write(f"Mom\n**{mom}**")
+                g4.write(f"Pro\n**{pro}**")
+                g5.write(f"Rev\n**{rev}**")
+                
+                st.divider()
+                
                 ec1, ec2 = st.columns(2)
                 with ec1:
                    st.caption("**Technical**")
@@ -196,10 +219,10 @@ def main():
             # If is_mobile is None, we do nothing this run. 
             # Streamlit will likely rerun when st_javascript returns the value.
         
-        use_mobile = st.toggle("📱 View", value=st.session_state.get("mobile_view", False), key="mobile_view_toggle")
-        # Update session state if toggled
-        st.session_state.mobile_view = use_mobile
-
+        # User requested removal of manual toggle to rely on auto-detection
+        # use_mobile = st.toggle("📱 View", value=st.session_state.get("mobile_view", False), key="mobile_view_toggle")
+        # st.session_state.mobile_view = use_mobile
+    
     st.divider()
 
     # --- 1. Focus List (Interactive) ---
@@ -222,36 +245,25 @@ def main():
              st.markdown("### Focus Navigator")
              
              # 1. Prepare Selectbox Options
-             # Format: "AGX 🟢 BUY · U9.5 · Trend Cont..."
+             # Format: "AGX BUY" (Simplified)
              options = []
              ticker_map = {}
              
              for item in focus_items:
-                 t = item.get('ticker')
-                 if not t: continue
+                 t_raw = item.get('ticker')
+                 if not t_raw: continue
+                 
+                 # MASK TICKER
+                 t_display = mask_ticker(t_raw)
                  
                  v = item.get('verdict', 'WATCH')
-                 urg = item.get('urgency', 0.0)
-                 sig = item.get('signal', 'N/A')
-                 p_date = item.get('picked_date', '')
-                 
-                 # Urgency Formatting
-                 try:
-                     u_val = float(urg)
-                     u_str = f"U{u_val:.1f}"
-                 except:
-                     u_str = f"U{urg}"
-
                  # Emoji for Verdict
                  v_icon = "🟢" if "BUY" in str(v).upper() else "👀"
                  
-                 # Construct Label
-                 # Truncate signal if too long
-                 sig_short = (sig[:15] + '..') if len(sig) > 15 else sig
-                 
-                 label = f"{t} {v_icon} {v} · {u_str} · {sig_short}"
+                 # Simple Label: "N*** 🟢 BUY"
+                 label = f"{t_display} {v_icon} {v}"
                  options.append(label)
-                 ticker_map[label] = t
+                 ticker_map[label] = t_raw # Map back to raw ticker for state
             
              # 2. State Management for Selectbox
              # Find current selection index
@@ -369,24 +381,11 @@ def main():
                 trig_type = td.get('trigger_type', 'N/A')
                 st.markdown(f"**Setup** · {trig_type}")
                 
-                # Metrics
+                # Metrics (Simplified: Price Only)
                 curr_price = float(td.get('current_price') or 0)
-                try:
-                    key_lvl = float(td.get('key_level', 0))
-                except:
-                    key_lvl = 0.0
                 
-                delta_val = curr_price - key_lvl
-                if key_lvl > 0:
-                    delta_pct = (delta_val / key_lvl) * 100
-                    delta_str = f"{delta_val:+.2f} ({delta_pct:+.1f}%)"
-                else:
-                    delta_str = "N/A"
-                
-                c1, c2, c3 = st.columns(3)
-                c1.metric("Price", f"${curr_price:.2f}")
-                c2.metric("Key Lvl", f"${key_lvl:.2f}")
-                c3.metric("Δ vs Key", delta_str)
+                # Single Metric
+                st.metric("Price", f"${curr_price:.2f}")
                 
                 # Setup Details
                 raw_details = str(td.get('details', 'No details available.'))
