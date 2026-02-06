@@ -3,9 +3,26 @@
 /* Global Clean Reset */
 :root {
     --ap-mobile-quant-color: #0f172a;
-    --ap-mobile-price-color: #0b1220;
+    --ap-mobile-price-color: #0a0a0a;
     --ap-mobile-picked-color: #475569;
-    --ap-mobile-setup-price-color: #0b1220;
+    --ap-mobile-setup-price-color: #0a0a0a;
+}
+
+/* Mobile Card Text (Shared) */
+.mobile-quant {
+    text-align: right;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--ap-mobile-quant-color) !important;
+    margin-top: 0.1rem;
+}
+
+.mobile-price {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ap-mobile-price-color) !important;
+    margin-top: 0.1rem;
+    margin-bottom: 0.2rem;
 }
 .block-container {
     padding-top: 5rem !important;
@@ -20,22 +37,6 @@
         padding-bottom: 1.5rem !important;
         padding-left: 0.75rem !important;
         padding-right: 0.75rem !important;
-    }
-
-    .mobile-quant {
-        text-align: right;
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--ap-mobile-quant-color) !important;
-        margin-top: 0.1rem;
-    }
-
-    .mobile-price {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--ap-mobile-price-color) !important;
-        margin-top: 0.1rem;
-        margin-bottom: 0.2rem;
     }
 
     div[data-testid="stCaptionContainer"] p {
@@ -184,6 +185,14 @@ h3 {
     color: var(--ap-mobile-picked-color) !important;
 }
 
+div[data-testid="stMarkdownContainer"] .mobile-price {
+    color: var(--ap-mobile-price-color) !important;
+}
+
+div[data-testid="stMarkdownContainer"] .mobile-setup-price {
+    color: var(--ap-mobile-setup-price-color) !important;
+}
+
 h3 {
     margin-top: 1.5rem !important;
     margin-bottom: 1rem !important;
@@ -255,9 +264,9 @@ h3 {
 @media (prefers-color-scheme: light) {
     :root {
         --ap-mobile-quant-color: #0f172a;
-        --ap-mobile-price-color: #0b1220;
+        --ap-mobile-price-color: #0a0a0a;
         --ap-mobile-picked-color: #475569;
-        --ap-mobile-setup-price-color: #0b1220;
+        --ap-mobile-setup-price-color: #0a0a0a;
     }
 }
 
@@ -284,7 +293,7 @@ body.streamlit-light,
 body.light,
 .stApp.light {
     --ap-mobile-quant-color: #0f172a;
-    --ap-mobile-price-color: #0b1220;
+    --ap-mobile-price-color: #0a0a0a;
     --ap-mobile-picked-color: #475569;
-    --ap-mobile-setup-price-color: #0b1220;
+    --ap-mobile-setup-price-color: #0a0a0a;
 }
