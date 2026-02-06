@@ -293,9 +293,11 @@ def main():
     # --- Header ---
     c_title, c_toggle = st.columns([0.8, 0.2])
     with c_title:
-        if "first_load" in st.session_state and not st.session_state.get("mobile_view", False):
+        if not st.session_state.get("mobile_view", False):
+            st.markdown("<div class='desktop-only'>", unsafe_allow_html=True)
             st.title("Performance Overview")
             st.caption(f"Last Synced: {updated_at}")
+            st.markdown("</div>", unsafe_allow_html=True)
     
     with c_toggle:
         # Auto-Detect Mobile (Only runs once ideally, but Streamlit reruns might re-trigger)
@@ -317,9 +319,11 @@ def main():
     st.divider()
 
     # --- 1. Focus List (Interactive) ---
-    if "first_load" in st.session_state and not st.session_state.get("mobile_view", False):
+    if not st.session_state.get("mobile_view", False):
+        st.markdown("<div class='desktop-only'>", unsafe_allow_html=True)
         st.markdown("### Focus List (Top 8)")
         st.caption("Urgency-ranked signals with AI verdicts")
+        st.markdown("</div>", unsafe_allow_html=True)
     
     focus_items = data.get("focus_view_model", [])
     
@@ -389,26 +393,7 @@ def main():
             if selected_label:
                 st.session_state.focus_selected = ticker_map[selected_label]
 
-            # 3. Now Viewing Anchor
-            # "One glance" summary container
-            selected_item = next((i for i in focus_items if i['ticker'] == st.session_state.focus_selected), None)
-
-            if selected_item:
-                with st.container(border=True):
-                    # Top Row: Ticker + Verdict
-                    t_str = selected_item.get('ticker')
-                    t_display = mask_ticker(t_str)
-                    v_str = format_verdict_label(selected_item.get('verdict'))
-
-                    st.markdown(f"**{t_display}**  |  {v_str}")
-
-            # Optional: Scan List Expander
-            with st.expander("Show Full Focus List (Scan Mode)"):
-                for item in focus_items:
-                    it_t = item.get('ticker')
-                    it_t_masked = mask_ticker(it_t)
-                    it_v = format_verdict_label(item.get('verdict'))
-                    st.caption(f"**{it_t_masked}** ({it_v})")
+            # 3. Now Viewing Anchor removed per request
 
         else:
             # Standard Desktop 4-Column Grid
@@ -463,7 +448,8 @@ def main():
                             st.rerun()
 
         # --- Deep Dive (Execution Dashboard) ---
-        st.divider()
+        if not st.session_state.get("mobile_view", False):
+            st.divider()
         # st.markdown("### Detail Panel") # Removed header to save space on mobile? Or keep for clarity? User said "Deep Dive".
         
         selected_ticker = st.session_state.focus_selected
