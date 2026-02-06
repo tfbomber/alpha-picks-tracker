@@ -32,11 +32,18 @@ def render_mobile_cards(df):
         return
 
     # --- Controls ---
-    c_filter, c_sort = st.columns([0.6, 0.4])
-    with c_filter:
-        filter_txt = st.text_input("Filter Ticker", key="mob_filter", placeholder="e.g. NVDA")
-    with c_sort:
-        sort_opt = st.selectbox("Sort By", ["Day% Desc", "Ticker A-Z", "Hold Desc"], key="mob_sort", label_visibility="collapsed")
+    filter_txt = st.text_input(
+        "Filter",
+        key="mob_filter",
+        placeholder="Filter ticker",
+        label_visibility="collapsed"
+    )
+    sort_opt = st.selectbox(
+        "Sort",
+        ["Ticker A-Z", "Hold Desc"],
+        key="mob_sort",
+        label_visibility="collapsed"
+    )
 
     # --- Logic ---
     # 1. Filter
@@ -44,9 +51,7 @@ def render_mobile_cards(df):
         df = df[df['ticker'].str.contains(filter_txt.upper(), na=False)]
     
     # 2. Sort
-    if sort_opt == "Day% Desc":
-        df = df.sort_values(by="Day%", ascending=False)
-    elif sort_opt == "Ticker A-Z":
+    if sort_opt == "Ticker A-Z":
         df = df.sort_values(by="ticker", ascending=True)
     elif sort_opt == "Hold Desc":
         df = df.sort_values(by="hold_streak_days", ascending=False)
@@ -67,25 +72,12 @@ def render_mobile_cards(df):
         # (Assuming 'ticker' col is already masked in main, but let's be safe)
         
         price_value = coerce_float(row.get('price'))
-        day_pct_value = coerce_float(row.get('Day%'))
         signal = row.get('quant', 'Hold') # Using 'quant' emoji as signal or raw text
 
         if price_value is None:
             price_display = "N/A"
         else:
             price_display = f"${price_value:.2f}"
-
-        # Color Logic for Day%
-        if day_pct_value is None:
-            pct_color = "gray"
-            pct_str = "N/A"
-            day_comp_str = "N/A"
-        else:
-            # Enhanced visual: text color instead of emoji icon
-            if day_pct_value >= 0:
-                day_comp_str = f":green[{day_pct_value:+.2f}%]"
-            else:
-                day_comp_str = f":red[{day_pct_value:+.2f}%]"
 
         # Grades Visuals (Moved to Details, but fetched here)
         val = row.get('value_grade', '-')
@@ -108,6 +100,12 @@ def render_mobile_cards(df):
         rsi_val = format_float(row.get('rsi14', '-'))
         vol_val = format_float(row.get('vol', '-'))
         atr_pct = format_float(row.get('atr14_pct', '-')) # Not in mini summary but needed for logic if added
+        rsi_detail = rsi_val
+        vol_detail = vol_val
+        atr_detail = atr_pct
+        ema21_detail = format_float(row.get('ema21', '-'))
+        ema55_detail = format_float(row.get('ema55', '-'))
+        sma200_detail = format_float(row.get('sma200', '-'))
         
         # 2. Trend Logic
         # Need raw float for comparison
@@ -152,19 +150,17 @@ def render_mobile_cards(df):
 
         # --- Render Card (Native) ---
         with st.container(border=True):
-            # Row 1: Ticker | Day%
-            c1, c2 = st.columns([0.65, 0.35])
-            with c1:
-                # Ticker + faint Date
-                if pick_display:
-                    st.markdown(f"**{ticker}** <span style='font-size:0.8em; color:#64748b'> · {pick_display}</span>", unsafe_allow_html=True)
-                else:
-                    st.markdown(f"**{ticker}**")
-            with c2:
-                st.markdown(f"<div style='text-align: right'>{day_comp_str}</div>", unsafe_allow_html=True)
+            # Row 1: Ticker + Date
+            if pick_display:
+                st.markdown(
+                    f"**{ticker}** <span style='font-size:0.8em; color:#64748b'> · {pick_display}</span>",
+                    unsafe_allow_html=True
+                )
+            else:
+                st.markdown(f"**{ticker}**")
             
-            # Row 2: Price | Quant (Split to ensure clean separation)
-            c3, c4 = st.columns([0.65, 0.35])
+            # Row 2: Price | Quant
+            c3, c4 = st.columns([0.7, 0.3])
             with c3:
                  st.caption(f"{price_display}")
             with c4:
@@ -189,15 +185,15 @@ def render_mobile_cards(df):
                 
                 ec1, ec2 = st.columns(2)
                 with ec1:
-                   st.caption("**Technical**")
-                   st.write(f"RSI: {rsi}")
-                   st.write(f"Vol Ratio: {vol}")
-                   st.write(f"ATR%: {row.get('atr14_pct', '-')}")
+                    st.caption("**Technical**")
+                    st.write(f"RSI: {rsi_detail}")
+                    st.write(f"Vol Ratio: {vol_detail}")
+                    st.write(f"ATR%: {atr_detail}")
                 with ec2:
-                   st.caption("**Trend**")
-                   st.write(f"EMA21: {ema21}")
-                   st.write(f"EMA55: {row.get('ema55', '-')}")
-                   st.write(f"SMA200: {sma200}")
+                    st.caption("**Trend**")
+                    st.write(f"EMA21: {ema21_detail}")
+                    st.write(f"EMA55: {ema55_detail}")
+                    st.write(f"SMA200: {sma200_detail}")
                 
                 st.write(f"**Earnings**: {earning}")
                 st.write(f"**Hold Streak**: {streak} Days")
@@ -246,11 +242,18 @@ def main():
     meta = data.get("meta", {})
     updated_at = meta.get("updated_at", "Unknown")
 
+    if "mobile_view" not in st.session_state:
+        st.session_state["mobile_view"] = False
+
     # --- Header ---
     c_title, c_toggle = st.columns([0.8, 0.2])
     with c_title:
-        st.title("Performance Overview")
-        st.caption(f"Last Synced: {updated_at}")
+        if st.session_state.get("mobile_view", False):
+            st.markdown("<div class='mobile-title'>Performance Overview</div>", unsafe_allow_html=True)
+            st.caption(f"Last Synced: {updated_at}")
+        else:
+            st.title("Performance Overview")
+            st.caption(f"Last Synced: {updated_at}")
     
     with c_toggle:
         # Auto-Detect Mobile (Only runs once ideally, but Streamlit reruns might re-trigger)
@@ -259,7 +262,7 @@ def main():
             is_mobile = is_mobile_device()
             # Only finalize state if we got a valid detection result (True/False), not None
             if is_mobile is not None:
-                st.session_state.mobile_view = is_mobile
+                st.session_state["mobile_view"] = is_mobile
                 st.session_state.first_load = True
                 st.rerun()
             # If is_mobile is None, we do nothing this run. 
@@ -272,8 +275,9 @@ def main():
     st.divider()
 
     # --- 1. Focus List (Interactive) ---
-    st.markdown("### Focus List (Top 8)")
-    st.caption("Urgency-ranked signals with AI verdicts")
+    if not st.session_state.get("mobile_view", False):
+        st.markdown("### Focus List (Top 8)")
+        st.caption("Urgency-ranked signals with AI verdicts")
     
     focus_items = data.get("focus_view_model", [])
     
@@ -286,78 +290,74 @@ def main():
         
         # --- Responsive Focus List ---
         # If Mobile: Vertical Stack. If Desktop: 4 Columns.
-        if st.session_state.mobile_view:
-             # --- Mobile Focus Navigator ---
-             st.markdown("### Focus Navigator")
-             
-             # 1. Prepare Selectbox Options
-             # Format: "AGX BUY" (Simplified)
-             options = []
-             ticker_map = {}
-             
-             for item in focus_items:
-                 t_raw = item.get('ticker')
-                 if not t_raw: continue
-                 
-                 # MASK TICKER
-                 t_display = mask_ticker(t_raw)
-                 
-                 v = item.get('verdict', 'WATCH')
-                 # Emoji for Verdict
-                 v_icon = "🟢" if "BUY" in str(v).upper() else "👀"
-                 
-                 # Simple Label: "N*** 🟢 BUY"
-                 label = f"{t_display} {v_icon} {v}"
-                 options.append(label)
-                 ticker_map[label] = t_raw # Map back to raw ticker for state
-            
-             # 2. State Management for Selectbox
-             # Find current selection index
-             current_ticker = st.session_state.focus_selected
-             default_index = 0
-             
-             # Reverse lookup for index
-             for i, opt in enumerate(options):
-                 if ticker_map.get(opt) == current_ticker:
-                     default_index = i
-                     break
-            
-             selected_label = st.selectbox(
-                 "Select Ticker to Deep Dive",
-                 options=options,
-                 index=default_index,
-                 key="focus_navigator_mobile",
-                 label_visibility="collapsed"
-             )
-             
-             # Update State immediately
-             if selected_label:
-                 st.session_state.focus_selected = ticker_map[selected_label]
+        if st.session_state.get("mobile_view", False):
+            # --- Mobile Focus Navigator ---
 
-             # 3. Now Viewing Anchor
-             # "One glance" summary container
-             selected_item = next((i for i in focus_items if i['ticker'] == st.session_state.focus_selected), None)
-             
-             if selected_item:
-                 with st.container(border=True):
-                     # Top Row: Ticker + Verdict
-                     t_str = selected_item.get('ticker')
-                     v_str = selected_item.get('verdict')
-                     u_raw = selected_item.get('urgency')
-                     s_raw = selected_item.get('signal')
-                     d_raw = selected_item.get('picked_date')
-                     
-                     st.markdown(f"**{t_str}**  |  {v_str}")
-                     st.caption(f"Urgency {u_raw} · {s_raw} · {d_raw}")
+            # 1. Prepare Selectbox Options
+            # Format: "AGX BUY" (Simplified)
+            options = []
+            ticker_map = {}
 
-             # Optional: Scan List Expander
-             with st.expander("Show Full Focus List (Scan Mode)"):
-                 for item in focus_items:
-                     it_t = item.get('ticker')
-                     it_v = item.get('verdict')
-                     it_u = item.get('urgency')
-                     st.caption(f"**{it_t}** ({it_v}) - Urgency {it_u}")
+            for item in focus_items:
+                t_raw = item.get('ticker')
+                if not t_raw:
+                    continue
 
+                # MASK TICKER
+                t_display = mask_ticker(t_raw)
+
+                v = item.get('verdict', 'WATCH')
+                # Emoji for Verdict
+                v_icon = "🟢" if "BUY" in str(v).upper() else "👀"
+
+                # Simple Label: "N*** 🟢 BUY"
+                label = f"{t_display} {v_icon} {v}"
+                options.append(label)
+                ticker_map[label] = t_raw # Map back to raw ticker for state
+
+            # 2. State Management for Selectbox
+            # Find current selection index
+            current_ticker = st.session_state.focus_selected
+            default_index = 0
+
+            # Reverse lookup for index
+            for i, opt in enumerate(options):
+                if ticker_map.get(opt) == current_ticker:
+                    default_index = i
+                    break
+
+            selected_label = st.selectbox(
+                "Select Ticker to Deep Dive",
+                options=options,
+                index=default_index,
+                key="focus_navigator_mobile",
+                label_visibility="collapsed"
+            )
+
+            # Update State immediately
+            if selected_label:
+                st.session_state.focus_selected = ticker_map[selected_label]
+
+            # 3. Now Viewing Anchor
+            # "One glance" summary container
+            selected_item = next((i for i in focus_items if i['ticker'] == st.session_state.focus_selected), None)
+
+            if selected_item:
+                with st.container(border=True):
+                    # Top Row: Ticker + Verdict
+                    t_str = selected_item.get('ticker')
+                    t_display = mask_ticker(t_str)
+                    v_str = selected_item.get('verdict')
+
+                    st.markdown(f"**{t_display}**  |  {v_str}")
+
+            # Optional: Scan List Expander
+            with st.expander("Show Full Focus List (Scan Mode)"):
+                for item in focus_items:
+                    it_t = item.get('ticker')
+                    it_t_masked = mask_ticker(it_t)
+                    it_v = item.get('verdict')
+                    st.caption(f"**{it_t_masked}** ({it_v})")
 
         else:
             # Standard Desktop 4-Column Grid
@@ -431,7 +431,13 @@ def main():
                 curr_price = float(td.get('current_price') or 0)
                 
                 # Single Metric
-                st.metric("Price", f"${curr_price:.2f}")
+                if st.session_state.get("mobile_view", False):
+                    st.markdown(
+                        f"<div class='mobile-setup-price'>Price ${curr_price:.2f}</div>",
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.metric("Price", f"${curr_price:.2f}")
                 
                 # Setup Details
                 raw_details = str(td.get('details', 'No details available.'))
@@ -495,28 +501,29 @@ def main():
         
         # --- Strict Column Mapping from Dashboard.py ---
         # Rename columns to match the 'column_config' expectations
-        # Order: Ticker, Price, Day%, Hold, Earnings, EMA21, EMA55, SMA200, RSI, ATR, Vol, Quant, Grades
-        final_display = df[[
-            'ticker', 'picked_date', 'last_price', 'Day%', 'hold_streak_days', 'earnings_fmt',
+        # Order: Ticker, Price, Hold, Earnings, EMA21, EMA55, SMA200, RSI, ATR, Vol, Quant, Grades
+        expected_cols = [
+            'ticker', 'picked_date', 'last_price', 'hold_streak_days', 'earnings_fmt',
             'ema21_fmt', 'ema55_fmt', 'sma200_fmt', 'rsi14', 'atr14_pct', 'vol_ratio',
             'quant_rating_emoji', 'value_grade', 'growth_grade',
             'profitability_grade', 'momentum_grade', 'eps_revisions_grade'
-        ]].rename(columns={
+        ]
+
+        final_display = df.reindex(columns=expected_cols).rename(columns={
             'quant_rating_emoji': 'quant',
             'last_price': 'price',
             'earnings_fmt': 'earnings',
             'ema21_fmt': 'ema21',
             'ema55_fmt': 'ema55',
             'sma200_fmt': 'sma200',
-            'rsi14_fmt': 'rsi14', # Map formatted RSI here
             'vol_ratio': 'vol'
         })
 
         final_display['ticker'] = final_display['ticker'].apply(mask_ticker)
         
         # Strict Config Copy from Dashboard.py
-        if st.session_state.mobile_view:
-             render_mobile_cards(final_display)
+        if st.session_state.get("mobile_view", False):
+            render_mobile_cards(final_display)
         else:
             st.dataframe(
                 final_display,
@@ -524,7 +531,6 @@ def main():
                     'ticker': st.column_config.TextColumn('Ticker', width='small'),
                     'picked_date': st.column_config.TextColumn('Picked', width='small'),
                     'price': st.column_config.NumberColumn('Price', width='small', format='$%.2f'),
-                    'Day%': st.column_config.NumberColumn('Day%', width='small', format='%.2f%%'),
                     'hold_streak_days': st.column_config.NumberColumn('Hold', width='small', format='%.0f'),
                     'earnings': st.column_config.TextColumn('Earnings', width='small'),
                     'ema21': st.column_config.TextColumn('EMA21', width='small'),
@@ -545,7 +551,7 @@ def main():
                     'momentum_grade': st.column_config.TextColumn('Mom', width='small'),
                     'eps_revisions_grade': st.column_config.TextColumn('Rev', width='small')
                 },
-                width='stretch', # Updated to suppress deprecation warning
+                use_container_width=True,
                 hide_index=True,
                 height=500
             )
