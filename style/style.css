@@ -7,7 +7,15 @@
 }
 
 /* Mobile Responsive Override */
+.mobile-only {
+    display: none;
+}
+
 @media only screen and (max-width: 600px) {
+    .mobile-only {
+        display: block;
+    }
+
     .block-container {
         padding-top: 1.25rem !important;
         padding-bottom: 1.5rem !important;

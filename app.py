@@ -136,6 +136,7 @@ def render_mobile_cards(df):
             return extract_float(v)
              
         raw_e21 = safe_float(row.get('ema21'))
+        raw_e55 = safe_float(row.get('ema55'))
         raw_s200 = safe_float(row.get('sma200'))
         
         trend_tags = []
@@ -143,6 +144,10 @@ def render_mobile_cards(df):
              if raw_e21 is not None:
                  if raw_price > raw_e21: trend_tags.append(":green[>E21]")
                  else: trend_tags.append(":red[<E21]")
+             
+             if raw_e55 is not None:
+                 if raw_price > raw_e55: trend_tags.append(":green[>E55]")
+                 else: trend_tags.append(":red[<E55]")
              
              if raw_s200 is not None:
                  if raw_price > raw_s200: trend_tags.append(":green[>S200]")
@@ -209,6 +214,15 @@ def render_mobile_cards(df):
                 
                 st.divider()
                 
+                def format_trend_detail(label, value):
+                    if value is None:
+                        return f"{label}: N/A"
+                    if raw_price is None:
+                        return f"{label}: {value:.2f}"
+                    if raw_price > value:
+                        return f":green[>{label}: {value:.2f}]"
+                    return f":red[<{label}: {value:.2f}]"
+
                 ec1, ec2 = st.columns(2)
                 with ec1:
                     st.caption("**Technical**")
@@ -217,9 +231,9 @@ def render_mobile_cards(df):
                     st.write(f"ATR%: {atr_detail}")
                 with ec2:
                     st.caption("**Trend**")
-                    st.write(f"EMA21: {ema21_detail}")
-                    st.write(f"EMA55: {ema55_detail}")
-                    st.write(f"SMA200: {sma200_detail}")
+                    st.markdown(format_trend_detail("EMA21", raw_e21))
+                    st.markdown(format_trend_detail("EMA55", raw_e55))
+                    st.markdown(format_trend_detail("SMA200", raw_s200))
                 
                 st.write(f"**Earnings**: {earning}")
                 st.write(f"**Hold Streak**: {streak} Days")
@@ -268,21 +282,18 @@ def main():
     meta = data.get("meta", {})
     updated_at = meta.get("updated_at", "Unknown")
 
-    if st.session_state.get("mobile_view", False):
-        st.markdown(
-            f"<div class='mobile-sync'>Last Synced: {updated_at}</div>",
-            unsafe_allow_html=True
-        )
-
     if "mobile_view" not in st.session_state:
         st.session_state["mobile_view"] = False
+
+    st.markdown(
+        f"<div class='mobile-sync mobile-only'>Last Synced: {updated_at}</div>",
+        unsafe_allow_html=True
+    )
 
     # --- Header ---
     c_title, c_toggle = st.columns([0.8, 0.2])
     with c_title:
-        if st.session_state.get("mobile_view", False):
-            st.markdown("<div class='mobile-title'>&nbsp;</div>", unsafe_allow_html=True)
-        else:
+        if not st.session_state.get("mobile_view", False):
             st.title("Performance Overview")
             st.caption(f"Last Synced: {updated_at}")
     
