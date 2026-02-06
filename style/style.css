@@ -63,8 +63,7 @@
     }
 
     h1 {
-        font-size: 1.35rem !important;
-        margin-bottom: 0.3rem !important;
+        display: none !important;
     }
 
     h2 {
