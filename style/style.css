@@ -33,7 +33,7 @@
 
     div[data-testid="stCaptionContainer"] p {
         margin-top: 0.1rem !important;
-        margin-bottom: 0.1rem !important;
+        margin-bottom: 0.05rem !important;
         line-height: 1.25 !important;
     }
 
@@ -66,7 +66,7 @@
 
     h3 {
         font-size: 1rem !important;
-        margin-top: 0.4rem !important;
+        margin-top: 0.2rem !important;
         margin-bottom: 0.2rem !important;
     }
 

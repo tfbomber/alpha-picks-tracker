@@ -302,9 +302,7 @@ def main():
     # st.session_state.mobile_view = use_mobile
 
     # --- Header ---
-    if st.session_state.get("mobile_view", False):
-        st.caption(f"Last Synced: {updated_at}")
-    else:
+    if not st.session_state.get("mobile_view", False):
         st.title("Performance Overview")
         st.caption(f"Last Synced: {updated_at}")
 
@@ -329,6 +327,7 @@ def main():
         # If Mobile: Vertical Stack. If Desktop: 4 Columns.
         if st.session_state.get("mobile_view", False):
             # --- Mobile Focus Navigator ---
+            st.caption(f"Last Synced: {updated_at}")
             st.subheader("Key APs to watch")
 
             def format_verdict_label(value: str) -> str:
