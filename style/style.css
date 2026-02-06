@@ -225,7 +225,97 @@ h3 {
     margin-bottom: 1rem !important;
 }
 
-.compact-guide b,
-.compact-guide strong {
-    color: #475569 !important;
+
+/* Dark Mode Support (System Preference) */
+@media (prefers-color-scheme: dark) {
+    
+    /* Global Text Overrides */
+    h1, h2, h3, p, li, span, div {
+        color: #f1f5f9; /* Slate 100 */
+    }
+
+    h1, h2, h3 {
+        color: #f8fafc !important; /* Slate 50 */
+    }
+
+    /* Mobile Text Specifics */
+    .mobile-title {
+        color: #f8fafc !important;
+    }
+
+    .mobile-quant {
+        color: #f1f5f9 !important;
+    }
+
+    .mobile-price {
+        color: #cbd5e1 !important; /* Slate 300 */
+    }
+
+    .mobile-setup-price {
+        color: #e2e8f0 !important;
+    }
+
+    /* Card Backgrounds - Dark Theme */
+    .card {
+        background: #1e293b !important; /* Slate 800 */
+        border-color: #334155 !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .mobile-card {
+        background: rgba(30, 41, 59, 0.9) !important; /* Slate 800 alpha */
+        border: 1px solid rgba(51, 65, 85, 0.8) !important;
+        backdrop-filter: blur(10px);
+    }
+
+    /* Metrics in Dark Mode */
+    [data-testid="stMetricValue"] {
+        color: #f8fafc !important;
+    }
+
+    [data-testid="stMetricLabel"] {
+        color: #94a3b8 !important; /* Slate 400 */
+    }
+
+    /* Status Cards - Keep colored backgrounds but adjust text if needed */
+    .status-neutral {
+        background: #1e293b !important;
+        color: #cbd5e1 !important;
+        border-color: #334155 !important;
+    }
+
+    /* Focus Grid Buttons */
+    .focus-grid button {
+        background: #1e293b !important;
+        border-color: #334155 !important;
+    }
+
+    .focus-grid button p {
+        color: #e2e8f0 !important;
+    }
+
+    .focus-grid button:hover {
+        border-color: #60a5fa !important; /* Blue 400 */
+        background: #334155 !important;
+    }
+
+    /* Guides */
+    .compact-guide {
+        color: #94a3b8 !important;
+    }
+    
+    .compact-guide b,
+    .compact-guide strong {
+        color: #cbd5e1 !important;
+    }
+    
+    /* Streamlit Expander & Other UI */
+    div[data-testid="stExpander"] {
+        background-color: transparent !important;
+        color: #f1f5f9 !important;
+    }
+    
+    div[data-testid="stExpander"] p {
+        color: #cbd5e1 !important;
+    }
 }
