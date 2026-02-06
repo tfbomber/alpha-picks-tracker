@@ -180,7 +180,7 @@ def render_mobile_cards(df):
             with c1:
                 if pick_display:
                     st.markdown(
-                        f"**{ticker}** <span style='font-size:0.8em; color:#64748b'> · Picked {pick_display}</span>",
+                        f"**{ticker}** <span class='mobile-picked'> · Picked {pick_display}</span>",
                         unsafe_allow_html=True
                     )
                 else:
