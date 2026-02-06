@@ -3,8 +3,8 @@
 /* Global Clean Reset */
 :root {
     --ap-mobile-quant-color: #0f172a;
-    --ap-mobile-price-color: #475569;
-    --ap-mobile-picked-color: #64748b;
+    --ap-mobile-price-color: #0f172a;
+    --ap-mobile-picked-color: #475569;
     --ap-mobile-setup-price-color: #0f172a;
 }
 .block-container {
@@ -26,13 +26,13 @@
         text-align: right;
         font-size: 0.75rem;
         font-weight: 600;
-        color: var(--ap-mobile-quant-color);
+        color: var(--ap-mobile-quant-color) !important;
         margin-top: 0.1rem;
     }
 
     .mobile-price {
         font-size: 0.85rem;
-        color: var(--ap-mobile-price-color);
+        color: var(--ap-mobile-price-color) !important;
         margin-top: 0.1rem;
         margin-bottom: 0.2rem;
     }
@@ -175,12 +175,12 @@ h3 {
 .mobile-setup-price {
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--ap-mobile-setup-price-color);
+    color: var(--ap-mobile-setup-price-color) !important;
 }
 
 .mobile-picked {
     font-size: 0.8em;
-    color: var(--ap-mobile-picked-color);
+    color: var(--ap-mobile-picked-color) !important;
 }
 
 h3 {
@@ -255,6 +255,7 @@ html[data-theme="dark"],
 body[data-theme="dark"],
 .stApp[data-theme="dark"],
 [data-testid="stAppViewContainer"][data-theme="dark"],
+[data-theme="dark"],
 body.streamlit-dark,
 .stApp.streamlit-dark,
 body.dark,
