@@ -285,13 +285,6 @@ def main():
     if "mobile_view" not in st.session_state:
         st.session_state["mobile_view"] = False
 
-    st.markdown(
-        f"<h1 class='desktop-only'>Performance Overview</h1>"
-        f"<p class='desktop-only desktop-sync'>Last Synced: {updated_at}</p>"
-        f"<div class='mobile-only mobile-sync'>Last Synced: {updated_at}</div>",
-        unsafe_allow_html=True
-    )
-
     # Auto-Detect Mobile (Only runs once ideally, but Streamlit reruns might re-trigger)
     # We use session_state to hold the "auto-detected" preference once.
     if "first_load" not in st.session_state:
@@ -301,21 +294,27 @@ def main():
             st.session_state["mobile_view"] = is_mobile
             st.session_state.first_load = True
             st.rerun()
-        # If is_mobile is None, we do nothing this run. 
+        # If is_mobile is None, we do nothing this run.
         # Streamlit will likely rerun when st_javascript returns the value.
-    
+
     # User requested removal of manual toggle to rely on auto-detection
     # use_mobile = st.toggle("📱 View", value=st.session_state.get("mobile_view", False), key="mobile_view_toggle")
     # st.session_state.mobile_view = use_mobile
-    
-    st.divider()
+
+    # --- Header ---
+    if st.session_state.get("mobile_view", False):
+        st.caption(f"Last Synced: {updated_at}")
+    else:
+        st.title("Performance Overview")
+        st.caption(f"Last Synced: {updated_at}")
+
+    if not st.session_state.get("mobile_view", False):
+        st.divider()
 
     # --- 1. Focus List (Interactive) ---
-    st.markdown(
-        "<h3 class='desktop-only'>Focus List (Top 8)</h3>"
-        "<p class='desktop-only desktop-sub'>Urgency-ranked signals with AI verdicts</p>",
-        unsafe_allow_html=True
-    )
+    if not st.session_state.get("mobile_view", False):
+        st.markdown("### Focus List (Top 8)")
+        st.caption("Urgency-ranked signals with AI verdicts")
     
     focus_items = data.get("focus_view_model", [])
     
