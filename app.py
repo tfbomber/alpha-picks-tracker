@@ -83,8 +83,7 @@ def render_mobile_cards(df):
         text = str(value or "").strip()
         if not text:
             return "Hold"
-        cleaned = re.sub(r"^[^A-Za-z0-9]+\s*", "", text)
-        return cleaned if cleaned else "Hold"
+        return text
 
     # Iterate rows
     for index, row in df.iterrows():
@@ -269,6 +268,12 @@ def main():
     meta = data.get("meta", {})
     updated_at = meta.get("updated_at", "Unknown")
 
+    if st.session_state.get("mobile_view", False):
+        st.markdown(
+            f"<div class='mobile-sync'>Last Synced: {updated_at}</div>",
+            unsafe_allow_html=True
+        )
+
     if "mobile_view" not in st.session_state:
         st.session_state["mobile_view"] = False
 
@@ -276,7 +281,7 @@ def main():
     c_title, c_toggle = st.columns([0.8, 0.2])
     with c_title:
         if st.session_state.get("mobile_view", False):
-            st.caption(f"Last Synced: {updated_at}")
+            st.markdown("<div class='mobile-title'>&nbsp;</div>", unsafe_allow_html=True)
         else:
             st.title("Performance Overview")
             st.caption(f"Last Synced: {updated_at}")
@@ -318,7 +323,7 @@ def main():
         # If Mobile: Vertical Stack. If Desktop: 4 Columns.
         if st.session_state.get("mobile_view", False):
             # --- Mobile Focus Navigator ---
-            st.caption("需要着重关注的 APs")
+            st.subheader("Key APs to watch")
 
             def format_verdict_label(value: str) -> str:
                 text = str(value or "").replace("_", " ").strip()
