@@ -9,9 +9,68 @@
 /* Mobile Responsive Override */
 @media only screen and (max-width: 600px) {
     .block-container {
-        padding-top: 2rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
+        padding-top: 1.25rem !important;
+        padding-bottom: 1.5rem !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+
+    .mobile-quant {
+        text-align: right;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #0f172a;
+        margin-top: 0.1rem;
+    }
+
+    .mobile-price {
+        font-size: 0.85rem;
+        color: #475569;
+        margin-top: 0.1rem;
+        margin-bottom: 0.2rem;
+    }
+
+    div[data-testid="stCaptionContainer"] p {
+        margin-top: 0.1rem !important;
+        margin-bottom: 0.1rem !important;
+        line-height: 1.25 !important;
+    }
+
+    div[data-testid="stMarkdownContainer"] p {
+        margin-top: 0.2rem !important;
+        margin-bottom: 0.2rem !important;
+        line-height: 1.25 !important;
+    }
+
+    div[data-testid="stExpander"] p {
+        margin-top: 0.15rem !important;
+        margin-bottom: 0.15rem !important;
+        line-height: 1.2 !important;
+    }
+
+    h1 {
+        font-size: 1.35rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+
+    h2 {
+        font-size: 1.1rem !important;
+        margin-top: 1rem !important;
+        margin-bottom: 0.4rem !important;
+    }
+
+    h3 {
+        font-size: 1rem !important;
+        margin-top: 0.9rem !important;
+        margin-bottom: 0.4rem !important;
+    }
+
+    [data-testid="stMetricValue"] {
+        font-size: 1.4rem !important;
+    }
+
+    [data-testid="stMetricLabel"] {
+        font-size: 0.8rem !important;
     }
 }
 
@@ -91,6 +150,21 @@ h2,
 h3 {
     color: #0f172a;
     font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+.mobile-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+    font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+.mobile-setup-price {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
 }
 
 h3 {

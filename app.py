@@ -64,6 +64,28 @@ def render_mobile_cards(df):
         except (TypeError, ValueError):
             return None
 
+    def extract_float(value):
+        if value is None:
+            return None
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, str):
+            cleaned = value.replace(",", "")
+            match = re.search(r"[-+]?\d*\.?\d+", cleaned)
+            if match:
+                try:
+                    return float(match.group())
+                except (TypeError, ValueError):
+                    return None
+        return None
+
+    def format_signal_label(value):
+        text = str(value or "").strip()
+        if not text:
+            return "Hold"
+        cleaned = re.sub(r"^[^A-Za-z0-9]+\s*", "", text)
+        return cleaned if cleaned else "Hold"
+
     # Iterate rows
     for index, row in df.iterrows():
         # Prepare Data
@@ -73,6 +95,7 @@ def render_mobile_cards(df):
         
         price_value = coerce_float(row.get('price'))
         signal = row.get('quant', 'Hold') # Using 'quant' emoji as signal or raw text
+        signal_text = format_signal_label(signal)
 
         if price_value is None:
             price_display = "N/A"
@@ -91,11 +114,10 @@ def render_mobile_cards(df):
         
         # 1. Helper for safe float
         def format_float(val, precision=2):
-            try:
-                f_val = float(val)
-                return f"{f_val:.{precision}f}"
-            except (TypeError, ValueError):
+            f_val = extract_float(val)
+            if f_val is None:
                 return "-"
+            return f"{f_val:.{precision}f}"
 
         rsi_val = format_float(row.get('rsi14', '-'))
         vol_val = format_float(row.get('vol', '-'))
@@ -112,8 +134,7 @@ def render_mobile_cards(df):
         raw_price = price_value # already float or None
         
         def safe_float(v):
-             try: return float(v)
-             except: return None
+            return extract_float(v)
              
         raw_e21 = safe_float(row.get('ema21'))
         raw_s200 = safe_float(row.get('sma200'))
@@ -150,21 +171,27 @@ def render_mobile_cards(df):
 
         # --- Render Card (Native) ---
         with st.container(border=True):
-            # Row 1: Ticker + Date
-            if pick_display:
+            # Row 1: Ticker + Picked | Quant (Top Right)
+            c1, c2 = st.columns([0.72, 0.28])
+            with c1:
+                if pick_display:
+                    st.markdown(
+                        f"**{ticker}** <span style='font-size:0.8em; color:#64748b'> · Picked {pick_display}</span>",
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.markdown(f"**{ticker}**")
+            with c2:
                 st.markdown(
-                    f"**{ticker}** <span style='font-size:0.8em; color:#64748b'> · {pick_display}</span>",
+                    f"<div class='mobile-quant'>{signal_text}</div>",
                     unsafe_allow_html=True
                 )
-            else:
-                st.markdown(f"**{ticker}**")
             
-            # Row 2: Price | Quant
-            c3, c4 = st.columns([0.7, 0.3])
-            with c3:
-                 st.caption(f"{price_display}")
-            with c4:
-                 st.markdown(f"<div style='text-align: right'>{signal}</div>", unsafe_allow_html=True)
+            # Row 2: Price
+            st.markdown(
+                f"<div class='mobile-price'>{price_display}</div>",
+                unsafe_allow_html=True
+            )
 
             # Row 3 & 4: Mini Summaries
             st.caption(tech_line)
@@ -175,11 +202,11 @@ def render_mobile_cards(df):
                 # Grades Section
                 st.caption("**Factor Grades**")
                 g1, g2, g3, g4, g5 = st.columns(5)
-                g1.write(f"Val\n**{val}**")
-                g2.write(f"Gro\n**{gro}**")
-                g3.write(f"Mom\n**{mom}**")
-                g4.write(f"Pro\n**{pro}**")
-                g5.write(f"Rev\n**{rev}**")
+                g1.markdown(f"Val **{val}**")
+                g2.markdown(f"Gro **{gro}**")
+                g3.markdown(f"Mom **{mom}**")
+                g4.markdown(f"Pro **{pro}**")
+                g5.markdown(f"Rev **{rev}**")
                 
                 st.divider()
                 
@@ -249,7 +276,6 @@ def main():
     c_title, c_toggle = st.columns([0.8, 0.2])
     with c_title:
         if st.session_state.get("mobile_view", False):
-            st.markdown("<div class='mobile-title'>Performance Overview</div>", unsafe_allow_html=True)
             st.caption(f"Last Synced: {updated_at}")
         else:
             st.title("Performance Overview")
@@ -292,9 +318,19 @@ def main():
         # If Mobile: Vertical Stack. If Desktop: 4 Columns.
         if st.session_state.get("mobile_view", False):
             # --- Mobile Focus Navigator ---
+            st.caption("需要着重关注的 APs")
+
+            def format_verdict_label(value: str) -> str:
+                text = str(value or "").replace("_", " ").strip()
+                if not text:
+                    return "Watch"
+                return text.lower().capitalize()
+
+            def format_picked_label(value: str) -> str:
+                picked = str(value or "").strip()
+                return picked if picked else "N/A"
 
             # 1. Prepare Selectbox Options
-            # Format: "AGX BUY" (Simplified)
             options = []
             ticker_map = {}
 
@@ -306,12 +342,11 @@ def main():
                 # MASK TICKER
                 t_display = mask_ticker(t_raw)
 
-                v = item.get('verdict', 'WATCH')
-                # Emoji for Verdict
-                v_icon = "🟢" if "BUY" in str(v).upper() else "👀"
+                verdict_display = format_verdict_label(item.get('verdict', 'WATCH'))
+                picked_display = format_picked_label(item.get('picked_date'))
 
-                # Simple Label: "N*** 🟢 BUY"
-                label = f"{t_display} {v_icon} {v}"
+                # Label: "N*** | Picked 01/15/2026 | Imminent catalyst"
+                label = f"{t_display} | Picked {picked_display} | {verdict_display}"
                 options.append(label)
                 ticker_map[label] = t_raw # Map back to raw ticker for state
 
@@ -347,7 +382,7 @@ def main():
                     # Top Row: Ticker + Verdict
                     t_str = selected_item.get('ticker')
                     t_display = mask_ticker(t_str)
-                    v_str = selected_item.get('verdict')
+                    v_str = format_verdict_label(selected_item.get('verdict'))
 
                     st.markdown(f"**{t_display}**  |  {v_str}")
 
@@ -356,7 +391,7 @@ def main():
                 for item in focus_items:
                     it_t = item.get('ticker')
                     it_t_masked = mask_ticker(it_t)
-                    it_v = item.get('verdict')
+                    it_v = format_verdict_label(item.get('verdict'))
                     st.caption(f"**{it_t_masked}** ({it_v})")
 
         else:
