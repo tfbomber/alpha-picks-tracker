@@ -206,11 +206,11 @@ def render_mobile_cards(df):
                 # Grades Section
                 st.caption("**Factor Grades**")
                 g1, g2, g3, g4, g5 = st.columns(5)
-                g1.markdown(f"Val **{val}**")
-                g2.markdown(f"Gro **{gro}**")
-                g3.markdown(f"Mom **{mom}**")
-                g4.markdown(f"Pro **{pro}**")
-                g5.markdown(f"Rev **{rev}**")
+                g1.write(f"Val {val}")
+                g2.write(f"Gro {gro}")
+                g3.write(f"Mom {mom}")
+                g4.write(f"Pro {pro}")
+                g5.write(f"Rev {rev}")
                 
                 st.divider()
                 
@@ -293,7 +293,7 @@ def main():
     # --- Header ---
     c_title, c_toggle = st.columns([0.8, 0.2])
     with c_title:
-        if not st.session_state.get("mobile_view", False):
+        if "first_load" in st.session_state and not st.session_state.get("mobile_view", False):
             st.title("Performance Overview")
             st.caption(f"Last Synced: {updated_at}")
     
@@ -317,7 +317,7 @@ def main():
     st.divider()
 
     # --- 1. Focus List (Interactive) ---
-    if not st.session_state.get("mobile_view", False):
+    if "first_load" in st.session_state and not st.session_state.get("mobile_view", False):
         st.markdown("### Focus List (Top 8)")
         st.caption("Urgency-ranked signals with AI verdicts")
     
