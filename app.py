@@ -286,44 +286,36 @@ def main():
         st.session_state["mobile_view"] = False
 
     st.markdown(
-        f"<div class='mobile-sync mobile-only'>Last Synced: {updated_at}</div>",
+        f"<h1 class='desktop-only'>Performance Overview</h1>"
+        f"<p class='desktop-only desktop-sync'>Last Synced: {updated_at}</p>"
+        f"<div class='mobile-only mobile-sync'>Last Synced: {updated_at}</div>",
         unsafe_allow_html=True
     )
 
-    # --- Header ---
-    c_title, c_toggle = st.columns([0.8, 0.2])
-    with c_title:
-        if not st.session_state.get("mobile_view", False):
-            st.markdown("<div class='desktop-only'>", unsafe_allow_html=True)
-            st.title("Performance Overview")
-            st.caption(f"Last Synced: {updated_at}")
-            st.markdown("</div>", unsafe_allow_html=True)
+    # Auto-Detect Mobile (Only runs once ideally, but Streamlit reruns might re-trigger)
+    # We use session_state to hold the "auto-detected" preference once.
+    if "first_load" not in st.session_state:
+        is_mobile = is_mobile_device()
+        # Only finalize state if we got a valid detection result (True/False), not None
+        if is_mobile is not None:
+            st.session_state["mobile_view"] = is_mobile
+            st.session_state.first_load = True
+            st.rerun()
+        # If is_mobile is None, we do nothing this run. 
+        # Streamlit will likely rerun when st_javascript returns the value.
     
-    with c_toggle:
-        # Auto-Detect Mobile (Only runs once ideally, but Streamlit reruns might re-trigger)
-        # We use session_state to hold the "auto-detected" preference once.
-        if "first_load" not in st.session_state:
-            is_mobile = is_mobile_device()
-            # Only finalize state if we got a valid detection result (True/False), not None
-            if is_mobile is not None:
-                st.session_state["mobile_view"] = is_mobile
-                st.session_state.first_load = True
-                st.rerun()
-            # If is_mobile is None, we do nothing this run. 
-            # Streamlit will likely rerun when st_javascript returns the value.
-        
-        # User requested removal of manual toggle to rely on auto-detection
-        # use_mobile = st.toggle("📱 View", value=st.session_state.get("mobile_view", False), key="mobile_view_toggle")
-        # st.session_state.mobile_view = use_mobile
+    # User requested removal of manual toggle to rely on auto-detection
+    # use_mobile = st.toggle("📱 View", value=st.session_state.get("mobile_view", False), key="mobile_view_toggle")
+    # st.session_state.mobile_view = use_mobile
     
     st.divider()
 
     # --- 1. Focus List (Interactive) ---
-    if not st.session_state.get("mobile_view", False):
-        st.markdown("<div class='desktop-only'>", unsafe_allow_html=True)
-        st.markdown("### Focus List (Top 8)")
-        st.caption("Urgency-ranked signals with AI verdicts")
-        st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown(
+        "<h3 class='desktop-only'>Focus List (Top 8)</h3>"
+        "<p class='desktop-only desktop-sub'>Urgency-ranked signals with AI verdicts</p>",
+        unsafe_allow_html=True
+    )
     
     focus_items = data.get("focus_view_model", [])
     
