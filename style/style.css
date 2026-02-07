@@ -1,26 +1,20 @@
 /* Modern Dashboard Styling */
 
 /* Global Clean Reset */
-:root {
-    --ap-mobile-quant-color: #0f172a;
-    --ap-mobile-price-color: #0a0a0a;
-    --ap-mobile-picked-color: #475569;
-    --ap-mobile-setup-price-color: #0a0a0a;
-}
 
-/* Mobile Card Text (Shared) */
+/* Mobile Card Text — light-dark() tracks Streamlit's color-scheme on .stApp */
 .mobile-quant {
     text-align: right;
     font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--ap-mobile-quant-color) !important;
+    font-weight: 700;
+    color: light-dark(#4338ca, #a5b4fc) !important;
     margin-top: 0.1rem;
 }
 
 .mobile-price {
     font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--ap-mobile-price-color) !important;
+    font-weight: 700;
+    color: light-dark(#1e40af, #93c5fd) !important;
     margin-top: 0.1rem;
     margin-bottom: 0.2rem;
 }
@@ -120,12 +114,12 @@
 [data-testid="stMetricValue"] {
     font-size: 1.8rem !important;
     font-weight: 700 !important;
-    color: #1e293b;
+    color: light-dark(#1e293b, #f8fafc);
 }
 
 [data-testid="stMetricLabel"] {
     font-size: 0.9rem !important;
-    color: #64748b;
+    color: light-dark(#64748b, #94a3b8);
     font-weight: 500;
 }
 
@@ -152,23 +146,23 @@
 }
 
 .status-neutral {
-    background: #f1f5f9;
-    color: #475569;
-    border: 1px solid #e2e8f0;
+    background: light-dark(#f1f5f9, #1e293b);
+    color: light-dark(#475569, #cbd5e1);
+    border: 1px solid light-dark(#e2e8f0, #334155);
 }
 
 /* Typography */
 h1,
 h2,
 h3 {
-    color: #0f172a;
+    color: light-dark(#0f172a, #f8fafc);
     font-family: "Space Grotesk", "Segoe UI", sans-serif;
 }
 
 .mobile-title {
     font-size: 1.15rem;
     font-weight: 700;
-    color: #0f172a;
+    color: light-dark(#0f172a, #f8fafc);
     line-height: 1.2;
     margin-bottom: 0.25rem;
     font-family: "Space Grotesk", "Segoe UI", sans-serif;
@@ -177,20 +171,20 @@ h3 {
 .mobile-setup-price {
     font-size: 0.95rem;
     font-weight: 700;
-    color: var(--ap-mobile-setup-price-color) !important;
+    color: light-dark(#1e40af, #93c5fd) !important;
 }
 
 .mobile-picked {
     font-size: 0.8em;
-    color: var(--ap-mobile-picked-color) !important;
+    color: light-dark(#6b7280, #9ca3af) !important;
 }
 
 div[data-testid="stMarkdownContainer"] .mobile-price {
-    color: var(--ap-mobile-price-color) !important;
+    color: light-dark(#1e40af, #93c5fd) !important;
 }
 
 div[data-testid="stMarkdownContainer"] .mobile-setup-price {
-    color: var(--ap-mobile-setup-price-color) !important;
+    color: light-dark(#1e40af, #93c5fd) !important;
 }
 
 h3 {
@@ -241,59 +235,63 @@ h3 {
 /* Institutional Style Guides */
 .compact-guide {
     font-size: 0.85rem !important;
-    color: #64748b !important;
+    color: light-dark(#64748b, #94a3b8) !important;
     line-height: 1.4 !important;
     margin-bottom: 1rem !important;
 }
 
 .compact-guide b,
 .compact-guide strong {
-    color: #475569 !important;
+    color: light-dark(#475569, #cbd5e1) !important;
 }
 
-/* Dark Mode Support (Mobile Cards Only) */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --ap-mobile-quant-color: #f1f5f9;
-        --ap-mobile-price-color: #e2e8f0;
-        --ap-mobile-picked-color: #94a3b8;
-        --ap-mobile-setup-price-color: #f8fafc;
+/* =============================================
+   Fallback: @media prefers-color-scheme
+   For browsers that don't support light-dark()
+   ============================================= */
+@supports not (color: light-dark(black, white)) {
+    @media (prefers-color-scheme: dark) {
+        .mobile-quant {
+            color: #a5b4fc !important;
+        }
+        .mobile-price {
+            color: #93c5fd !important;
+        }
+        .mobile-setup-price {
+            color: #93c5fd !important;
+        }
+        .mobile-picked {
+            color: #9ca3af !important;
+        }
+        div[data-testid="stMarkdownContainer"] .mobile-price {
+            color: #93c5fd !important;
+        }
+        div[data-testid="stMarkdownContainer"] .mobile-setup-price {
+            color: #93c5fd !important;
+        }
+        h1, h2, h3 {
+            color: #f8fafc !important;
+        }
+        .mobile-title {
+            color: #f8fafc !important;
+        }
+        [data-testid="stMetricValue"] {
+            color: #f8fafc !important;
+        }
+        [data-testid="stMetricLabel"] {
+            color: #94a3b8 !important;
+        }
+        .status-neutral {
+            background: #1e293b !important;
+            color: #cbd5e1 !important;
+            border-color: #334155 !important;
+        }
+        .compact-guide {
+            color: #94a3b8 !important;
+        }
+        .compact-guide b,
+        .compact-guide strong {
+            color: #cbd5e1 !important;
+        }
     }
-}
-
-@media (prefers-color-scheme: light) {
-    :root {
-        --ap-mobile-quant-color: #0f172a;
-        --ap-mobile-price-color: #0a0a0a;
-        --ap-mobile-picked-color: #475569;
-        --ap-mobile-setup-price-color: #0a0a0a;
-    }
-}
-
-html[data-theme="dark"],
-body[data-theme="dark"],
-.stApp[data-theme="dark"],
-[data-testid="stAppViewContainer"][data-theme="dark"],
-body.streamlit-dark,
-.stApp.streamlit-dark,
-body.dark,
-.stApp.dark {
-    --ap-mobile-quant-color: #f1f5f9;
-    --ap-mobile-price-color: #e2e8f0;
-    --ap-mobile-picked-color: #94a3b8;
-    --ap-mobile-setup-price-color: #f8fafc;
-}
-
-html[data-theme="light"],
-body[data-theme="light"],
-.stApp[data-theme="light"],
-[data-testid="stAppViewContainer"][data-theme="light"],
-body.streamlit-light,
-.stApp.streamlit-light,
-body.light,
-.stApp.light {
-    --ap-mobile-quant-color: #0f172a;
-    --ap-mobile-price-color: #0a0a0a;
-    --ap-mobile-picked-color: #475569;
-    --ap-mobile-setup-price-color: #0a0a0a;
 }
