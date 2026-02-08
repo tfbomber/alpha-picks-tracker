@@ -21,17 +21,29 @@ description: Specification for the Alpha Picks Public View Mobile Interface
 *   **Purpose**: Single entry point effectively filters the view. No vertical stacking.
 *   **Privacy**: Ticker MUST be masked (First letter + `*` repeated).
 
+### A2. Focus Scan Row (Optional)
+*   **When used**: Public view displays a Focus List scan row.
+*   **Format**: One-line, fixed 6 fields:
+    `Ticker | Setup | Tech | Distance | Catalyst | Urgency/News`
+*   **Distance**: Always `price vs SMA200 %` (primary risk gauge).
+*   **Tech**: `below/above + key line + confirm days` (e.g., `below SMA200 (3d)`).
+
 ### B. Deep Dive (Execution Dashboard)
-*   **Section 1: Setup Card** (Always Visible)
-    *   **Title**: `Setup · [Trigger Type]`
-    *   **Metric**: `Price` (uses `.mobile-setup-price` CSS class on mobile, `st.metric` on desktop).
-    *   **Details**: 200-char summary + Expander for full text.
-*   **Section 2: Action Plan** (Always Visible)
-    *   **Title**: `AI Judgement · Action Plan`
-    *   **Content**: 250-char summary + Expander.
-*   **Section 3: Logic Pillars** (Tabs)
-    *   **Tabs**: `Technical`, `Volume`, `News`, `Divergence`.
-    *   **Content**: Full text analysis.
+*   **A) One-line Verdict**
+    *   **Format**: `RISK_OFF / No Entry - ER -3d + price -18.7% below SMA200, trend bearish.`
+    *   **Price Source**: Must use `latest_price + price_type + price_timestamp` only.
+*   **B) Evidence (<=5 lines)**
+    1. Price / Timestamp / Session (Last/Close/Pre-Mkt)
+    2. Key Levels: SMA200/EMA55/EMA21 + distance%
+    3. Volume: RVOL20 + one-line explanation
+    4. News: Top 1-2 headlines + time
+    5. Divergence: e.g., `SA Buy vs price trend`
+*   **C) Playbook (Quantized)**
+    *   Ban: `until ER passed + 2 sessions`
+    *   Watch Trigger (Primary): `close reclaim SMA200`
+    *   Watch Trigger (Secondary): `2 closes above EMA21`
+    *   Failure: `reject at EMA21 with RVOL<1`
+    *   Next action: `watch only / add alert / remove from focus`
 
 ### C. Portfolio List (Inventory)
 *   **Component**: Vertical stack of `st.container(border=True)`.
@@ -55,6 +67,11 @@ description: Specification for the Alpha Picks Public View Mobile Interface
 - **Spacing**: Use `st.columns` to create grid-like alignments within containers.
 - **Density**: Keep row spacing compact on mobile; avoid extra blank lines between Price and RSI.
 - **Privacy**: **ALWAYS** mask tickers in public views.
+  - **Mask rule**:
+    - 1 letter: `A*`
+    - 2 letters: `A*`
+    - 3 letters: `A**`
+    - 4+ letters: `A***Z` (first + last, middle all `*`)
 
 ## 4. Dark Mode CSS Architecture
 

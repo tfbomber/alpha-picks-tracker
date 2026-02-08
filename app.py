@@ -270,8 +270,215 @@ def mask_ticker(ticker: str) -> str:
     value = str(ticker).strip()
     if not value:
         return ""
-    star_count = max(1, len(value) - 1)
-    return f"{value[0]}{'*' * star_count}"
+    if '*' in value:
+        return value
+    value = value.upper()
+    length = len(value)
+    if length == 1:
+        return f"{value[0]}*"
+    if length == 2:
+        return f"{value[0]}*"
+    if length == 3:
+        return f"{value[0]}**"
+    return f"{value[0]}{'*' * (length - 2)}{value[-1]}"
+
+
+def safe_float(value):
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        cleaned = value.replace(",", "")
+        match = re.search(r"[-+]?\d*\.?\d+", cleaned)
+        if match:
+            try:
+                return float(match.group())
+            except (TypeError, ValueError):
+                return None
+    return None
+
+
+def format_distance_pct(val) -> str:
+    f_val = safe_float(val)
+    if f_val is None:
+        return "—"
+    return f"{f_val:+.1f}%"
+
+
+def format_catalyst_label(dte) -> str:
+    f_val = safe_float(dte)
+    if f_val is None:
+        return "—"
+    dte_int = int(f_val)
+    if dte_int >= 0:
+        return f"ER -{dte_int}d"
+    return f"ER +{abs(dte_int)}d"
+
+
+def resolve_trend_label(trend_color) -> str:
+    color = str(trend_color or "").upper()
+    if color == "GREEN":
+        return "bullish"
+    if color == "RED":
+        return "bearish"
+    return "neutral"
+
+
+def format_tech_status(item: dict) -> str:
+    trigger_key = str(item.get('primary_trigger_key') or '')
+    line_label = 'SMA200'
+    dist_val = item.get('dist_sma200_pct')
+    if 'EMA55' in trigger_key:
+        line_label = 'EMA55'
+        dist_val = item.get('dist_ema55_pct')
+    elif 'EMA21' in trigger_key:
+        line_label = 'EMA21'
+        dist_val = item.get('dist_ema21_pct')
+
+    status = '—'
+    f_dist = safe_float(dist_val)
+    if f_dist is not None:
+        status = 'below' if f_dist < 0 else 'above'
+        status = f"{status} {line_label}"
+    confirm_days = item.get('break_confirm_days')
+    f_confirm = safe_float(confirm_days)
+    if f_confirm is not None and f_confirm > 0 and status != '—':
+        status = f"{status} ({int(f_confirm)}d)"
+    return status
+
+
+def determine_setup_label(item: dict) -> str:
+    dte = safe_float(item.get('dte'))
+    trigger_key = str(item.get('primary_trigger_key') or '')
+    signal_text = str(item.get('signal') or '')
+    volume_alert = bool(item.get('volume_alert')) if item.get('volume_alert') is not None else False
+    news_raw = safe_float(item.get('news_sentiment_raw'))
+
+    if dte is not None and 0 <= int(dte) <= 5:
+        return 'IMMINENT_CATALYST'
+    if 'EARNINGS' in trigger_key or 'Earnings' in signal_text:
+        return 'IMMINENT_CATALYST'
+    if volume_alert or 'VOLUME' in trigger_key or 'Volume' in signal_text:
+        return 'VOL_MOMENTUM'
+    if news_raw is not None and abs(news_raw) >= 0.6:
+        return 'NEWS_SHOCK'
+    if any(key in trigger_key for key in ['BREAK', 'SELL_RULE', 'GAP_DOWN']) or 'Break' in signal_text:
+        return 'BREAK_RISK'
+    return 'WATCH'
+
+
+def format_urgency_news(urgency_val, news_raw) -> str:
+    f_urgency = safe_float(urgency_val)
+    if f_urgency is None:
+        urgency_str = '—'
+    else:
+        urgency_str = f"{f_urgency:.0f}"
+    if news_raw is None:
+        news_str = '—'
+    else:
+        news_str = f"{news_raw:+.2f}"
+    return f"{urgency_str} | News {news_str}"
+
+
+def format_key_levels_line(item: dict) -> str:
+    parts = []
+    for label, level_key, dist_key in [
+        ('SMA200', 'sma200', 'dist_sma200_pct'),
+        ('EMA55', 'ema55', 'dist_ema55_pct'),
+        ('EMA21', 'ema21', 'dist_ema21_pct')
+    ]:
+        level = safe_float(item.get(level_key))
+        dist_val = safe_float(item.get(dist_key))
+        if level is None or dist_val is None:
+            continue
+        parts.append(f"{label} {level:.2f} ({dist_val:+.1f}%)")
+    return " | ".join(parts) if parts else '—'
+
+
+def format_volume_evidence(vol_ratio) -> str:
+    f_val = safe_float(vol_ratio)
+    if f_val is None:
+        return 'RVOL20 —'
+    if f_val >= 2.0:
+        note = 'volume confirms move'
+    elif f_val >= 1.5:
+        note = 'volume elevated'
+    elif f_val < 1.0:
+        note = 'volume light'
+    else:
+        note = 'volume neutral'
+    return f"RVOL20 {f_val:.2f}x · {note}"
+
+
+def format_news_evidence(item: dict) -> str:
+    headline = item.get('news_headline')
+    summary = item.get('news_summary')
+    headline_age = item.get('news_age')
+    source_count = item.get('news_sources')
+
+    items = []
+    if headline:
+        if headline_age and source_count is not None:
+            items.append(f"{headline} ({headline_age}, {source_count} src)")
+        elif headline_age:
+            items.append(f"{headline} ({headline_age})")
+        else:
+            items.append(str(headline))
+    if summary and (not headline or summary.strip() not in str(headline)):
+        items.append(str(summary))
+    return " | ".join(items[:2]) if items else '—'
+
+
+def build_one_line_verdict(item: dict) -> str:
+    verdict = str(item.get('verdict') or 'WATCH').upper()
+    if verdict in ['EXIT', 'TRIM']:
+        prefix = 'RISK_OFF / No Entry'
+    elif verdict in ['ACCUMULATE', 'STRONG_ACCUMULATE']:
+        prefix = 'RISK_ON / Entry'
+    elif verdict == 'HOLD':
+        prefix = 'NEUTRAL / Watch'
+    else:
+        prefix = 'RISK_OFF / Watch'
+
+    dist_val = safe_float(item.get('dist_sma200_pct'))
+    dist_label = 'price —'
+    if dist_val is not None:
+        side = 'below' if dist_val < 0 else 'above'
+        dist_label = f"price {dist_val:+.1f}% {side} SMA200"
+    catalyst = format_catalyst_label(item.get('dte'))
+    trend = resolve_trend_label(item.get('trend_color'))
+    if catalyst == '—':
+        return f"{prefix} - {dist_label}, trend {trend}."
+    return f"{prefix} - {catalyst} + {dist_label}, trend {trend}."
+
+
+def format_verdict_label(value: str) -> str:
+    text = str(value or "").replace("_", " ").strip()
+    if not text:
+        return "Watch"
+    return text.lower().capitalize()
+
+
+def format_picked_label(value: str) -> str:
+    picked = str(value or "").strip()
+    return picked if picked else "N/A"
+
+
+def build_focus_options(focus_items: list) -> tuple[list, dict]:
+    options = []
+    ticker_map = {}
+    for item in focus_items:
+        t_raw = item.get('ticker')
+        if not t_raw:
+            continue
+        t_display = mask_ticker(t_raw)
+        verdict_display = format_verdict_label(item.get('verdict', 'WATCH'))
+        picked_display = format_picked_label(item.get('picked_date'))
+        label = f"{t_display} | Picked {picked_display} | {verdict_display}"
+        options.append(label)
+        ticker_map[label] = t_raw
+    return options, ticker_map
 
 def main():
     data = load_data()
@@ -312,200 +519,114 @@ def main():
     # --- 1. Focus List (Interactive) ---
     if not st.session_state.get("mobile_view", False):
         st.markdown("### Focus List (Top 8)")
-        st.caption("Urgency-ranked signals with AI verdicts")
+        st.caption("Scan format: Ticker | Setup | Tech | Distance | Catalyst | Urgency/News")
     
     focus_items = data.get("focus_view_model", [])
     
     if focus_items:
-        # Initialize Selection
-        ticker_list = [item.get('ticker') for item in focus_items]
+        ticker_list = [item.get('ticker') for item in focus_items if item.get('ticker')]
         if 'focus_selected' not in st.session_state or st.session_state.focus_selected not in ticker_list:
             if ticker_list:
                 st.session_state.focus_selected = ticker_list[0]
-        
-        # --- Responsive Focus List ---
-        # If Mobile: Vertical Stack. If Desktop: 4 Columns.
+
+        options, ticker_map = build_focus_options(focus_items)
+        current_ticker = st.session_state.focus_selected
+        default_index = 0
+        for i, opt in enumerate(options):
+            if ticker_map.get(opt) == current_ticker:
+                default_index = i
+                break
+
+        if not options:
+            st.info("No focus tickers available.")
+            return
+
         if st.session_state.get("mobile_view", False):
-            # --- Mobile Focus Navigator ---
             st.caption(f"Last Synced: {updated_at}")
             st.subheader("Key APs to watch")
 
-            def format_verdict_label(value: str) -> str:
-                text = str(value or "").replace("_", " ").strip()
-                if not text:
-                    return "Watch"
-                return text.lower().capitalize()
+        selected_label = st.selectbox(
+            "Select Ticker to Deep Dive",
+            options=options,
+            index=default_index,
+            key="focus_navigator",
+            label_visibility="collapsed" if st.session_state.get("mobile_view", False) else "visible"
+        )
+        if selected_label:
+            st.session_state.focus_selected = ticker_map[selected_label]
 
-            def format_picked_label(value: str) -> str:
-                picked = str(value or "").strip()
-                return picked if picked else "N/A"
+        scan_rows = []
+        for item in focus_items:
+            scan_rows.append({
+                'Ticker': mask_ticker(item.get('ticker', '')),
+                'Setup': determine_setup_label(item),
+                'Tech': format_tech_status(item),
+                'Distance': format_distance_pct(item.get('dist_sma200_pct')),
+                'Catalyst': format_catalyst_label(item.get('dte')),
+                'Urgency/News': format_urgency_news(item.get('urgency'), safe_float(item.get('news_sentiment_raw')))
+            })
 
-            # 1. Prepare Selectbox Options
-            options = []
-            ticker_map = {}
+        scan_df = pd.DataFrame(scan_rows)
+        st.dataframe(scan_df, use_container_width=True, hide_index=True)
 
-            for item in focus_items:
-                t_raw = item.get('ticker')
-                if not t_raw:
-                    continue
-
-                # MASK TICKER
-                t_display = mask_ticker(t_raw)
-
-                verdict_display = format_verdict_label(item.get('verdict', 'WATCH'))
-                picked_display = format_picked_label(item.get('picked_date'))
-
-                # Label: "N*** | Picked 01/15/2026 | Imminent catalyst"
-                label = f"{t_display} | Picked {picked_display} | {verdict_display}"
-                options.append(label)
-                ticker_map[label] = t_raw # Map back to raw ticker for state
-
-            # 2. State Management for Selectbox
-            # Find current selection index
-            current_ticker = st.session_state.focus_selected
-            default_index = 0
-
-            # Reverse lookup for index
-            for i, opt in enumerate(options):
-                if ticker_map.get(opt) == current_ticker:
-                    default_index = i
-                    break
-
-            selected_label = st.selectbox(
-                "Select Ticker to Deep Dive",
-                options=options,
-                index=default_index,
-                key="focus_navigator_mobile",
-                label_visibility="collapsed"
-            )
-
-            # Update State immediately
-            if selected_label:
-                st.session_state.focus_selected = ticker_map[selected_label]
-
-            # 3. Now Viewing Anchor removed per request
-
-        else:
-            # Standard Desktop 4-Column Grid
-            cols = st.columns(4)
-            for i, item in enumerate(focus_items):
-                with cols[i % 4]:
-                    verdict = item.get('verdict', 'WATCH')
-                    ticker = item.get('ticker')
-                    picked_date = item.get('picked_date')
-                    reason = item.get('reason', '')
-                    urgency_val = item.get('urgency')
-                    signal = item.get('signal') or '—'
-                    news = item.get('news') or '—'
-                    
-                    is_selected = (ticker == st.session_state.focus_selected)
-    
-                    if urgency_val is None:
-                        urgency_str = "N/A"
-                    else:
-                        try:
-                            urgency_float = float(urgency_val)
-                            if urgency_float == 0.0 and "Excluded" in str(reason):
-                                urgency_str = "Excluded"
-                            else:
-                                urgency_str = f"{urgency_float:.1f}"
-                        except (TypeError, ValueError):
-                            urgency_str = str(urgency_val)
-                    
-                    with st.container(border=True):
-                        picked_display = str(picked_date).strip() if picked_date else "N/A"
-                        ticker_value = str(ticker).strip() if ticker else ""
-                        if ticker_value:
-                            star_count = max(1, len(ticker_value) - 1)
-                            display_core = f"{ticker_value[0]}{'*' * star_count}(Picked: {picked_display})"
-                        else:
-                            display_core = f"(Picked: {picked_display})"
-                        st.markdown(
-                            f"<strong>{html.escape(display_core)}</strong> {html.escape(str(verdict))}",
-                            unsafe_allow_html=True
-                        )
-                        st.caption(f"{signal}")
-                        st.markdown(
-                            f"<small>Urgency {urgency_str} | News {news}</small>",
-                            unsafe_allow_html=True
-                        )
-                        
-                        # Selection Button
-                        btn_type = "primary" if is_selected else "secondary"
-                        btn_label = "Selected ✓" if is_selected else "Select"
-                        if st.button(btn_label, key=f"btn_{ticker}_{i}", use_container_width=True, type=btn_type):
-                            st.session_state.focus_selected = ticker
-                            st.rerun()
-
-        # --- Deep Dive (Execution Dashboard) ---
         if not st.session_state.get("mobile_view", False):
             st.divider()
-        # st.markdown("### Detail Panel") # Removed header to save space on mobile? Or keep for clarity? User said "Deep Dive".
-        
+
         selected_ticker = st.session_state.focus_selected
-        selected_item = next((item for item in focus_items if item['ticker'] == selected_ticker), None)
-        
+        selected_item = next((item for item in focus_items if item.get('ticker') == selected_ticker), None)
+
         if selected_item:
+            latest_price = safe_float(selected_item.get('latest_price'))
+            price_type = selected_item.get('price_type') or 'Close'
+            price_timestamp = selected_item.get('price_timestamp') or '—'
+
+            price_label = "N/A"
+            if latest_price is not None:
+                price_label = f"${latest_price:.2f} ({price_type}, {price_timestamp})"
+
+            divergence_text = strip_evidence_refs(str(selected_item.get('divergence', '')))
+            divergence_line = divergence_text if divergence_text else '—'
+
+            st.markdown("### Deep Dive")
+            st.markdown("**A) One-line Verdict**")
+            st.write(build_one_line_verdict(selected_item))
+
+            st.markdown("**B) Evidence**")
+            st.caption(f"Price: {price_label}")
+            st.caption(f"Key Levels: {format_key_levels_line(selected_item)}")
+            st.caption(f"Volume: {format_volume_evidence(selected_item.get('vol_ratio'))}")
+            st.caption(f"News: {format_news_evidence(selected_item)}")
+            st.caption(f"Divergence: {divergence_line}")
+
+            st.markdown("**C) Playbook**")
+            dte = safe_float(selected_item.get('dte'))
+            if dte is not None:
+                st.caption("Ban: until ER passed + 2 sessions")
+            else:
+                st.caption("Ban: —")
+            st.caption("Watch trigger (Primary): close reclaim SMA200")
+            st.caption("Watch trigger (Secondary): 2 closes above EMA21")
+            st.caption("Failure: reject at EMA21 with RVOL<1")
+
+            verdict = str(selected_item.get('verdict') or '').upper()
+            if verdict in ['EXIT', 'TRIM']:
+                next_action = 'remove from focus'
+            elif verdict in ['ACCUMULATE', 'STRONG_ACCUMULATE']:
+                next_action = 'add alert'
+            else:
+                next_action = 'watch only'
+            st.caption(f"Next action: {next_action}")
+
+            action_plan = selected_item.get('action_plan', '')
+            if action_plan:
+                action_clean = strip_evidence_refs(str(action_plan))
+                if action_clean:
+                    st.caption(f"Action plan note: {action_clean}")
+
             td = selected_item.get('trigger_details', {})
-            logic = selected_item.get('logic_pillars', {})
-            
-            # --- A) Setup Card ---
-            with st.container(border=True):
-                trig_type = td.get('trigger_type', 'N/A')
-                st.markdown(f"**Setup** · {trig_type}")
-                
-                # Metrics (Simplified: Price Only)
-                curr_price = float(td.get('current_price') or 0)
-                
-                # Single Metric
-                if st.session_state.get("mobile_view", False):
-                    st.markdown(
-                        f"<div class='mobile-setup-price'>Price ${curr_price:.2f}</div>",
-                        unsafe_allow_html=True
-                    )
-                else:
-                    st.metric("Price", f"${curr_price:.2f}")
-                
-                # Setup Details
-                raw_details = str(td.get('details', 'No details available.'))
-                # 200 char summary
-                summary_details = (raw_details[:200] + '...') if len(raw_details) > 200 else raw_details
-                st.caption(summary_details)
-                if len(raw_details) > 200:
-                    with st.expander("Show full setup details"):
-                        st.write(raw_details)
-
-            # --- B) Action Plan Card ---
-            action_raw = selected_item.get('action_plan') or logic.get('action_plan')
-            if action_raw:
-                action_clean = strip_evidence_refs(str(action_raw))
-                with st.container(border=True):
-                    st.markdown("**AI Judgement** · Action Plan")
-                    
-                    act_summary = (action_clean[:250] + '...') if len(action_clean) > 250 else action_clean
-                    st.write(act_summary)
-                    
-                    if len(action_clean) > 250:
-                        with st.expander("Show full Action Plan"):
-                            st.write(action_clean)
-
-            # --- C) Logic Pillars (Tabs) ---
-            t_tech, t_vol, t_news, t_div = st.tabs(["Technical", "Volume", "News", "Divergence"])
-            
-            def clean_text_safe(val):
-                if not val: return "N/A"
-                return strip_evidence_refs(str(val))
-
-            with t_tech:
-                st.write(clean_text_safe(logic.get('technical')))
-            with t_vol:
-                st.write(clean_text_safe(logic.get('volume_analysis')))
-            with t_news:
-                st.write(clean_text_safe(logic.get('news_catalyst')))
-            with t_div:
-                div_val = selected_item.get('divergence')
-                st.write(clean_text_safe(div_val))
-            
+            if isinstance(td, dict) and td.get('details'):
+                with st.expander("Trigger details", expanded=False):
+                    st.write(str(td.get('details')))
         else:
             st.info("Select a ticker to view details.")
 
