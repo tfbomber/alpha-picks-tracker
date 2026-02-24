@@ -48,11 +48,17 @@ def render_mobile_cards(df):
     # --- Logic ---
     # 1. Filter
     if filter_txt:
-        df = df[df['ticker'].str.contains(filter_txt.upper(), na=False)]
+        needle = filter_txt.strip().upper()
+        if needle:
+            masked_match = df['ticker'].fillna('').astype(str).str.upper().str.contains(needle, regex=False)
+            raw_col = df['ticker_raw'] if 'ticker_raw' in df.columns else df['ticker']
+            raw_match = raw_col.fillna('').astype(str).str.upper().str.contains(needle, regex=False)
+            df = df[masked_match | raw_match]
     
     # 2. Sort
     if sort_opt == "Ticker A-Z":
-        df = df.sort_values(by="ticker", ascending=True)
+        sort_col = "ticker_raw" if "ticker_raw" in df.columns else "ticker"
+        df = df.sort_values(by=sort_col, ascending=True)
     elif sort_opt == "Hold Desc":
         df = df.sort_values(by="hold_streak_days", ascending=False)
 
@@ -89,12 +95,14 @@ def render_mobile_cards(df):
     for index, row in df.iterrows():
         # Prepare Data
         ticker = row.get('ticker', 'N/A')
+        ticker_safe = html.escape(str(ticker))
         # Check if ticker is masked logic or raw string
         # (Assuming 'ticker' col is already masked in main, but let's be safe)
         
         price_value = coerce_float(row.get('price'))
         signal = row.get('quant', 'Hold') # Using 'quant' emoji as signal or raw text
         signal_text = format_signal_label(signal)
+        signal_safe = html.escape(signal_text)
 
         if price_value is None:
             price_display = "N/A"
@@ -180,14 +188,14 @@ def render_mobile_cards(df):
             with c1:
                 if pick_display:
                     st.markdown(
-                        f"**{ticker}** <span class='mobile-picked'> · Picked {pick_display}</span>",
+                        f"**{ticker_safe}** <span class='mobile-picked'> · Picked {pick_display}</span>",
                         unsafe_allow_html=True
                     )
                 else:
-                    st.markdown(f"**{ticker}**")
+                    st.markdown(f"**{ticker_safe}**")
             with c2:
                 st.markdown(
-                    f"<div class='mobile-quant'>{signal_text}</div>",
+                    f"<div class='mobile-quant'>{signal_safe}</div>",
                     unsafe_allow_html=True
                 )
             
@@ -432,25 +440,46 @@ def format_news_evidence(item: dict) -> str:
 
 def build_one_line_verdict(item: dict) -> str:
     verdict = str(item.get('verdict') or 'WATCH').upper()
-    if verdict in ['EXIT', 'TRIM']:
+    trend_color = str(item.get('trend_color') or '').upper()
+
+    verdict_prefix = {
+        'EXIT': 'RISK_OFF / No Entry',
+        'TRIM': 'RISK_OFF / No Entry',
+        'ACCUMULATE': 'RISK_ON / Entry',
+        'STRONG_ACCUMULATE': 'RISK_ON / Entry',
+        'HIGH_RVOL_EVENT': 'RISK_OFF / Volatility Event',
+        'RATING_PRESSURE': 'RISK_OFF / Rating Pressure',
+        'EARNINGS_MOMO': 'RISK_ON / Event Momentum',
+        'TREND_CONFIRMATION': 'RISK_ON / Trend Active',
+        'SENTIMENT_COLLISION': 'NEUTRAL / Signal Conflict',
+        'TREND_CONFLICT_UPG': 'NEUTRAL / Signal Conflict',
+        'EVENT_WINDOW': 'NEUTRAL / Event Window'
+    }
+
+    if verdict in verdict_prefix:
+        prefix = verdict_prefix[verdict]
+    elif verdict in ['EXIT', 'TRIM']:
         prefix = 'RISK_OFF / No Entry'
     elif verdict in ['ACCUMULATE', 'STRONG_ACCUMULATE']:
         prefix = 'RISK_ON / Entry'
-    elif verdict == 'HOLD':
-        prefix = 'NEUTRAL / Watch'
+    elif trend_color == 'GREEN':
+        prefix = 'RISK_ON / Trend Active'
+    elif trend_color == 'RED':
+        prefix = 'RISK_OFF / Trend Broken'
     else:
-        prefix = 'RISK_OFF / Watch'
+        prefix = 'NEUTRAL / Range Bound'
 
     dist_val = safe_float(item.get('dist_sma200_pct'))
     dist_label = 'price —'
     if dist_val is not None:
         side = 'below' if dist_val < 0 else 'above'
-        dist_label = f"price {dist_val:+.1f}% {side} SMA200"
+        dist_label = f"price {abs(dist_val):.1f}% {side} SMA200"
     catalyst = format_catalyst_label(item.get('dte'))
     trend = resolve_trend_label(item.get('trend_color'))
     if catalyst == '—':
         return f"{prefix} - {dist_label}, trend {trend}."
     return f"{prefix} - {catalyst} + {dist_label}, trend {trend}."
+
 
 
 def format_verdict_label(value: str) -> str:
@@ -463,6 +492,41 @@ def format_verdict_label(value: str) -> str:
 def format_picked_label(value: str) -> str:
     picked = str(value or "").strip()
     return picked if picked else "N/A"
+
+
+def resolve_next_action(verdict: str, trend_color: str) -> str:
+    verdict_action = {
+        'EXIT': 'remove from focus / reduce exposure',
+        'TRIM': 'remove from focus / reduce exposure',
+        'ACCUMULATE': 'add alert / size up',
+        'STRONG_ACCUMULATE': 'add alert / size up',
+        'HIGH_RVOL_EVENT': 'watch only (volatility event)',
+        'RATING_PRESSURE': 'watch only (wait for confirmation)',
+        'SENTIMENT_COLLISION': 'watch only (wait for confirmation)',
+        'TREND_CONFLICT_UPG': 'watch only (wait for confirmation)',
+        'EARNINGS_MOMO': 'add alert / event follow-through',
+        'EVENT_WINDOW': 'watch only (event risk window)',
+        'TREND_CONFIRMATION': 'monitor for entry/add (active uptrend)'
+    }
+    if verdict in verdict_action:
+        return verdict_action[verdict]
+    if trend_color == 'GREEN':
+        return 'monitor for entry/add (active uptrend)'
+    if trend_color == 'RED':
+        return 'watch only (wait for setup)'
+    return 'watch only'
+
+
+def format_ban_line(dte) -> str:
+    if dte is None:
+        return 'Ban: None (No immediate ER risk)'
+
+    dte_int = int(dte)
+    if 0 <= dte_int <= 5:
+        return f'Ban: until ER passed + 2 sessions (DTE: {dte_int})'
+    if -2 <= dte_int < 0:
+        return f'Ban: cooling down post-ER (DTE: +{abs(dte_int)})'
+    return 'Ban: None (No immediate ER risk)'
 
 
 def build_focus_options(focus_items: list) -> tuple[list, dict]:
@@ -600,22 +664,33 @@ def main():
 
             st.markdown("**C) Playbook**")
             dte = safe_float(selected_item.get('dte'))
-            if dte is not None:
-                st.caption("Ban: until ER passed + 2 sessions")
-            else:
-                st.caption("Ban: —")
-            st.caption("Watch trigger (Primary): close reclaim SMA200")
-            st.caption("Watch trigger (Secondary): 2 closes above EMA21")
-            st.caption("Failure: reject at EMA21 with RVOL<1")
+            
+            st.caption(format_ban_line(dte))
 
-            verdict = str(selected_item.get('verdict') or '').upper()
-            if verdict in ['EXIT', 'TRIM']:
-                next_action = 'remove from focus'
-            elif verdict in ['ACCUMULATE', 'STRONG_ACCUMULATE']:
-                next_action = 'add alert'
+            # Dynamic Trigger Logic based on price vs EMAs/SMA
+            dist_sma200 = safe_float(selected_item.get('dist_sma200_pct'))
+            dist_ema21 = safe_float(selected_item.get('dist_ema21_pct'))
+            
+            if dist_sma200 is not None and dist_sma200 > 0 and dist_ema21 is not None and dist_ema21 > 0:
+                # Strong Uptrend
+                st.caption("Watch trigger (Primary): hold line above EMA21")
+                st.caption("Watch trigger (Secondary): trend validation at SMA200")
+                st.caption("Failure: loss of EMA21 with RVOL > 1")
+            elif dist_sma200 is not None and dist_sma200 < 0:
+                # Downtrend / Break
+                st.caption("Watch trigger (Primary): strong close to reclaim SMA200")
+                st.caption("Watch trigger (Secondary): 2 consecutive closes above EMA21")
+                st.caption("Failure: reject at EMA21 with RVOL < 1")
             else:
-                next_action = 'watch only'
-            st.caption(f"Next action: {next_action}")
+                # Mixed / Near levels
+                st.caption("Watch trigger (Primary): definitive break above nearest resistance")
+                st.caption("Watch trigger (Secondary): establish higher low")
+                st.caption("Failure: breakdown below recent consolidation")
+
+            # Next action logic based on trend and verdict
+            verdict = str(selected_item.get('verdict') or '').upper()
+            trend_color = selected_item.get('trend_color', '').upper()
+            st.caption(f"Next action: {resolve_next_action(verdict, trend_color)}")
 
             action_plan = selected_item.get('action_plan', '')
             if action_plan:
@@ -667,14 +742,17 @@ def main():
             'vol_ratio': 'vol'
         })
 
-        final_display['ticker'] = final_display['ticker'].apply(mask_ticker)
+        ticker_raw = final_display['ticker'].fillna('').astype(str).str.strip().str.upper()
+        final_display['ticker_raw'] = ticker_raw
+        final_display['ticker'] = ticker_raw.apply(mask_ticker)
         
         # Strict Config Copy from Dashboard.py
         if st.session_state.get("mobile_view", False):
             render_mobile_cards(final_display)
         else:
+            desktop_display = final_display.drop(columns=['ticker_raw'], errors='ignore')
             st.dataframe(
-                final_display,
+                desktop_display,
                 column_config={
                     'ticker': st.column_config.TextColumn('Ticker', width='small'),
                     'picked_date': st.column_config.TextColumn('Picked', width='small'),
