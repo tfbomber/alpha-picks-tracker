@@ -278,8 +278,6 @@ def mask_ticker(ticker: str) -> str:
     value = str(ticker).strip()
     if not value:
         return ""
-    if '*' in value:
-        return value
     value = value.upper()
     length = len(value)
     if length == 1:
