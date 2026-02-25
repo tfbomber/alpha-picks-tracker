@@ -188,11 +188,11 @@ def render_mobile_cards(df):
             with c1:
                 if pick_display:
                     st.markdown(
-                        f"**{ticker_safe}** <span class='mobile-picked'> · Picked {pick_display}</span>",
+                        f"<strong>{ticker_safe}</strong> <span class='mobile-picked'> · Picked {pick_display}</span>",
                         unsafe_allow_html=True
                     )
                 else:
-                    st.markdown(f"**{ticker_safe}**")
+                    st.markdown(f"<strong>{ticker_safe}</strong>", unsafe_allow_html=True)
             with c2:
                 st.markdown(
                     f"<div class='mobile-quant'>{signal_safe}</div>",
