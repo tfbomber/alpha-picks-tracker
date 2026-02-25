@@ -542,11 +542,47 @@ def build_focus_options(focus_items: list) -> tuple[list, dict]:
         ticker_map[label] = t_raw
     return options, ticker_map
 
+
+def _show_admin_panel():
+    """Renders a compact traffic analytics panel behind a secret token gate."""
+    # 1. Check Query Token
+    token_in_url = st.query_params.get("admin")
+    actual_token = st.secrets.get("ADMIN_TOKEN")
+    
+    # 2. Secret Gate
+    if not actual_token or token_in_url != actual_token:
+        return
+
+    # 3. Render Panel
+    from analytics import get_stats
+    st.divider()
+    st.markdown("### 📊 Traffic Analytics")
+    
+    stats = get_stats()
+    
+    if "N/A" in stats.values():
+        st.warning("Could not reach Upstash Redis. Using N/A values.")
+    
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Web (7d)", stats["web_7d"])
+    c2.metric("Web (30d)", stats["web_30d"])
+    c3.metric("Web (Total)", stats["web_total"])
+    
+    c4, c5, c6 = st.columns(3)
+    c4.metric("Mobile (7d)", stats["mobile_7d"])
+    c5.metric("Mobile (30d)", stats["mobile_30d"])
+    c6.metric("Mobile (Total)", stats["mobile_total"])
+    st.caption("Timezone: Europe/Berlin. Sessions tracked once.")
+
 def main():
     data = load_data()
     if not data:
         st.error("System Offline: Snapshot missing.")
         return
+
+    # --- Analytics ---
+    from analytics import track_visit_once_per_session
+    track_visit_once_per_session()
 
     meta = data.get("meta", {})
     updated_at = meta.get("updated_at", "Unknown")
@@ -576,6 +612,18 @@ def main():
         st.caption(f"Last Synced: {updated_at}")
 
     if not st.session_state.get("mobile_view", False):
+        st.divider()
+
+    # --- 0. Focus Summary (Bannered) ---
+    summary_text = meta.get("focus_summary_text", "")
+    if summary_text:
+        if st.session_state.get("mobile_view", False):
+            with st.expander("📋 This Week's Radar (tap to expand)", expanded=False):
+                st.text(summary_text)
+        else:
+            with st.container(border=True):
+                st.markdown("#### Weekly Focus Radar")
+                st.code(summary_text, language="markdown")
         st.divider()
 
     # --- 1. Focus List (Interactive) ---
@@ -782,6 +830,9 @@ def main():
 
     else:
         st.warning("No Portfolio Data Available.")
+
+    # --- Admin Panel ---
+    _show_admin_panel()
 
 if __name__ == "__main__":
     main()
