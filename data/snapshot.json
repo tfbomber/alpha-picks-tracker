@@ -1,7 +1,8 @@
 {
   "meta": {
-    "updated_at": "2026-02-25 22:28:32",
+    "updated_at": "2026-02-25 22:44:15",
     "focus_message": "",
+    "focus_summary_text": "\ud83d\udd25 Weekly AP Quant Radar \u2014 Technical Focus List\n\n[AP-Clock]:\n\u2022 $POWL 167/180 (rem 13d)\n\n[ \ud83d\udcc9 BREAKDOWNS (Below 200-SMA) ]\n\u2022 $OKTA | EVENT+NEWS+DVG | -23.6% | Vol 1.3x | ER in 7d\n\u2022 $CRDO | EVENT+NEWS+DVG | -3.2% | Vol 0.6x | ER in 5d\n\u2022 $APP | NEWS+DVG+BD200 | -22.5% | Vol 0.6x | Reuters: the SEC probe involving AppLovin is still active. ([Reuters][4])\n\u2022 $TWLO | NEWS+BD200 | -4.1% | Vol 0.8x | Argus upgraded Twilio to Strong Buy, but recent insider selling and post-earnings digestion remain in focus. ([marketbeat.com][5])\n\u2022 $GM | NEWS+INFLECT+BD200 | -1.6% | Vol 0.5x | Reuters: tariff uncertainty remains a live overhang for legacy automakers including GM. ([Reuters][8])\n\u2022 $EAT | NEWS+DVG+BD200 | -6.1% | Vol 0.7x | Nasdaq/Zacks: Wall Street recommendations on EAT remain strongly positive (ABR ~1.59). ([nasdaq.com][9])\n\n[ \ud83d\ude80 STRENGTH (Above 200-SMA) ]\n\u2022 $STRL | EVENT+NEWS+X200 | +51.2% | Vol 1.1x | ER in 0d\n\u2022 $ARQT | EVENT+NEWS+X200 | +31.2% | Vol 0.5x | ER in 0d\n\n\ud83c\udfaf Triggers: GM > 81.59 (EMA21) | ARQT hold > 26.62 (EMA21) | TWLO > 115.84 (EMA21)\n\ud83d\udcca Full strategy view & live metrics: https://wid1990-ap.streamlit.app/",
     "sync_success": true
   },
   "focus_view_model": [
