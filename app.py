@@ -634,6 +634,9 @@ def main():
                     summary_text, 
                     flags=re.IGNORECASE
                 )
+        
+        # --- Remove the strategy link from the summary (Public View Safety) ---
+        summary_text = re.sub(r"\n📊 Full strategy view & live metrics: https://.*", "", summary_text)
         # -----------------------------------------------
 
         if st.session_state.get("mobile_view", False):
