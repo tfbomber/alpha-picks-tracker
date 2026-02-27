@@ -617,6 +617,25 @@ def main():
     # --- 0. Focus Summary (Bannered) ---
     summary_text = meta.get("focus_summary_text", "")
     if summary_text:
+        # --- Dynamically mask tickers in the summary ---
+        all_tickers = set()
+        for item in data.get("table_view_model", []):
+            if item.get("ticker"): all_tickers.add(item["ticker"])
+        for item in data.get("focus_view_model", []):
+            if item.get("ticker"): all_tickers.add(item["ticker"])
+        
+        # Sort by length descending to prevent substring substitution issues (e.g. AAPL vs AAP)
+        if all_tickers:
+            for t in sorted(all_tickers, key=len, reverse=True):
+                # Replace whole words matching the ticker using word boundaries
+                summary_text = re.sub(
+                    rf"\b{re.escape(t)}\b", 
+                    mask_ticker(t), 
+                    summary_text, 
+                    flags=re.IGNORECASE
+                )
+        # -----------------------------------------------
+
         if st.session_state.get("mobile_view", False):
             with st.expander("📋 This Week's Radar (tap to expand)", expanded=False):
                 st.text(summary_text)
