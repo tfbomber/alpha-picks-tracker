@@ -5,7 +5,7 @@ from datetime import datetime
 import zoneinfo
 
 # --- Config ---
-BERLIN_TZ = zoneinfo.ZoneInfo("Europe/Berlin")
+US_EASTERN_TZ = zoneinfo.ZoneInfo("America/New_York")
 
 def is_mobile(user_agent: str) -> bool:
     """Detect if the user agent belongs to a mobile device."""
@@ -43,7 +43,7 @@ def track_visit_once_per_session():
         # 1. Get Context
         ua = st.context.headers.get("user-agent", "")
         app_key = st.secrets.get("APP_ANALYTICS_KEY", "ap_public")
-        today = datetime.now(BERLIN_TZ).strftime("%Y-%m-%d")
+        today = datetime.now(US_EASTERN_TZ).strftime("%Y-%m-%d")
         
         # 2. Classify
         device_type = "mobile" if is_mobile(ua) else "desktop"
@@ -73,7 +73,7 @@ def get_stats():
     
     # Generate date lists for day bucketing
     from datetime import timedelta
-    now = datetime.now(BERLIN_TZ)
+    now = datetime.now(US_EASTERN_TZ)
     last_7d = [(now - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(7)]
     last_30d = [(now - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(30)]
     

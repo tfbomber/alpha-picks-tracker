@@ -564,7 +564,7 @@ def _show_admin_panel():
     c4.metric("Mobile (7d)", stats["mobile_7d"])
     c5.metric("Mobile (30d)", stats["mobile_30d"])
     c6.metric("Mobile (Total)", stats["mobile_total"])
-    st.caption("Timezone: Europe/Berlin. Sessions tracked once.")
+    st.caption("Timezone: US Eastern. Sessions tracked once.")
 
 def main():
     data = load_data()
