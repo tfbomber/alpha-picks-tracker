@@ -544,15 +544,7 @@ def build_focus_options(focus_items: list) -> tuple[list, dict]:
 
 
 def _show_admin_panel():
-    """Renders a compact traffic analytics panel behind a secret token gate."""
-    # 1. Check Query Token
-    token_in_url = st.query_params.get("admin")
-    actual_token = st.secrets.get("ADMIN_TOKEN")
-    
-    # 2. Secret Gate
-    if not actual_token or token_in_url != actual_token:
-        return
-
+    """Renders a compact traffic analytics panel."""
     # 3. Render Panel
     from analytics import get_stats
     st.divider()
