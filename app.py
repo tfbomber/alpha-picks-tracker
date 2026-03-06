@@ -839,6 +839,42 @@ def main():
     else:
         st.warning("No Portfolio Data Available.")
 
+    # --- Feedback Module ---
+    st.divider()
+    from analytics import submit_feedback, get_feedbacks
+
+    st.subheader("💬 Feedback & Suggestions")
+    
+    # Part 1: Public Submit
+    with st.container(border=True):
+        fb_text = st.text_area("Leave your feedback, feature requests, or bug reports here:", height=100, key="public_feedback_input")
+        if st.button("Submit Feedback", type="primary"):
+            if fb_text and fb_text.strip():
+                if submit_feedback(fb_text):
+                    st.success("Thank you! Your feedback has been submitted.")
+                else:
+                    st.error("Failed to submit feedback. Please try again.")
+            else:
+                st.warning("Please enter some text before submitting.")
+
+    # Part 2: Admin View (Guarded)
+    with st.expander("Admin: View Feedback"):
+        admin_pass = st.text_input("Admin Password", type="password", key="feedback_admin_pass")
+        if admin_pass:
+            if admin_pass == st.secrets.get("ADMIN_PASSWORD"):
+                st.success("Access Granted")
+                feedbacks = get_feedbacks()
+                if not feedbacks:
+                    st.info("No feedback entries found.")
+                else:
+                    st.write(f"Total entries: {len(feedbacks)}")
+                    for fb in feedbacks:
+                        with st.container(border=True):
+                            st.caption(f"🕒 {fb.get('timestamp', 'Unknown')}")
+                            st.write(fb.get('text', ''))
+            else:
+                st.error("Incorrect Password")
+
     # --- Admin Panel ---
     _show_admin_panel()
 

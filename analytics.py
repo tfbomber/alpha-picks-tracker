@@ -123,3 +123,41 @@ def get_stats():
         "desktop_30d": desktop_30d,
         "desktop_total": desktop_total
     }
+
+def submit_feedback(text: str) -> bool:
+    """Submit user feedback to Upstash Redis as a JSON string."""
+    if not text or not text.strip():
+        return False
+        
+    app_key = st.secrets.get("APP_ANALYTICS_KEY", "ap_public")
+    timestamp = datetime.now(US_EASTERN_TZ).strftime("%Y-%m-%d %H:%M:%S")
+    
+    payload = {
+        "timestamp": timestamp,
+        "text": text.strip()
+    }
+    
+    # LPUSH adds to the head of the list
+    cmds = [["LPUSH", f"feedback:{app_key}", json.dumps(payload)]]
+    res = _upstash_request(cmds)
+    return res is not None
+
+def get_feedbacks() -> list:
+    """Retrieve all feedback from Upstash Redis."""
+    app_key = st.secrets.get("APP_ANALYTICS_KEY", "ap_public")
+    
+    # LRANGE 0 -1 gets all elements
+    cmds = [["LRANGE", f"feedback:{app_key}", "0", "-1"]]
+    res = _upstash_request(cmds)
+    
+    if not res or not isinstance(res, list) or not res[0].get("result"):
+        return []
+        
+    feedbacks = []
+    for item_str in res[0]["result"]:
+        try:
+            feedbacks.append(json.loads(item_str))
+        except Exception:
+            feedbacks.append({"timestamp": "Unknown", "text": str(item_str)})
+            
+    return feedbacks
