@@ -124,7 +124,7 @@ def get_stats():
         "desktop_total": desktop_total
     }
 
-def submit_feedback(text: str) -> bool:
+def submit_feedback(text: str, email: str = "", sa_username: str = "") -> bool:
     """Submit user feedback to Upstash Redis as a JSON string."""
     if not text or not text.strip():
         return False
@@ -134,7 +134,9 @@ def submit_feedback(text: str) -> bool:
     
     payload = {
         "timestamp": timestamp,
-        "text": text.strip()
+        "text": text.strip(),
+        "email": email.strip() if email else "",
+        "sa_username": sa_username.strip() if sa_username else ""
     }
     
     # LPUSH adds to the head of the list

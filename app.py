@@ -847,15 +847,27 @@ def main():
     
     # Part 1: Public Submit
     with st.container(border=True):
-        fb_text = st.text_area("Leave your feedback, feature requests, or bug reports here:", height=100, key="public_feedback_input")
-        if st.button("Submit Feedback", type="primary"):
+        st.markdown("We'd love to hear your thoughts! Feature requests, bug reports, and general feedback are all welcome.")
+        
+        with st.form(key="public_feedback_form", clear_on_submit=True):
+            fb_text = st.text_area("Your Message (Required) *", height=100)
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                email_input = st.text_input("Email (Optional)")
+            with col2:
+                sa_input = st.text_input("Seeking Alpha Username (Optional)")
+                
+            submit_button = st.form_submit_button(label="Submit Feedback", type="primary")
+            
+        if submit_button:
             if fb_text and fb_text.strip():
-                if submit_feedback(fb_text):
+                if submit_feedback(fb_text, email=email_input, sa_username=sa_input):
                     st.success("Thank you! Your feedback has been submitted.")
                 else:
                     st.error("Failed to submit feedback. Please try again.")
             else:
-                st.warning("Please enter some text before submitting.")
+                st.warning("Please enter your message before submitting.")
 
     # Part 2: Admin View (Guarded)
     with st.expander("Admin: View Feedback"):
@@ -871,6 +883,17 @@ def main():
                     for fb in feedbacks:
                         with st.container(border=True):
                             st.caption(f"🕒 {fb.get('timestamp', 'Unknown')}")
+                            
+                            # Render Meta if they exist
+                            meta_str = []
+                            if fb.get('email'):
+                                meta_str.append(f"📧 {fb.get('email')}")
+                            if fb.get('sa_username'):
+                                meta_str.append(f"👤 {fb.get('sa_username')}")
+                            
+                            if meta_str:
+                                st.markdown(f"**{' | '.join(meta_str)}**")
+                                
                             st.write(fb.get('text', ''))
             else:
                 st.error("Incorrect Password")
