@@ -275,37 +275,24 @@ def strip_evidence_refs(text: str) -> str:
 def mask_ticker(ticker: str) -> str:
     if ticker is None:
         return ""
-    value = str(ticker).strip()
+    value = str(ticker).strip().upper()
     if not value:
         return ""
-    value = value.upper()
     
     # NEW: Handle dot-separated tickers like BRK.B
     if "." in value:
-        parts = value.split(".", 1)
-        prefix = parts[0]
-        suffix = parts[1]
-        
-        # Mask the prefix using the standard logic
-        if not prefix:
-             return f"*.{suffix}"
-        
-        # Inlined simple masking for prefix to avoid recursion overhead or issues
-        p_len = len(prefix)
-        if p_len == 1: masked_prefix = prefix + "*"
-        elif p_len == 2: masked_prefix = prefix[0] + "*"
-        elif p_len == 3: masked_prefix = prefix[0] + "**"
-        else: masked_prefix = prefix[0] + ("*" * (p_len - 2)) + prefix[-1]
-        
-        return f"{masked_prefix}.{suffix}"
+        parts = value.split(".")
+        # Mask each part separately, e.g., BRK.B -> B**.B* or similar
+        # To match user vibe of keeping it recognizable but hidden
+        masked_parts = [mask_ticker(p) if p else "*" for p in parts]
+        return ".".join(masked_parts)
 
     length = len(value)
-    if length == 1:
-        return f"{value[0]}*"
-    if length == 2:
-        return f"{value[0]}*"
+    if length <= 2:
+        return value[0] + "*"
     if length == 3:
-        return f"{value[0]}**"
+        return value[0] + "**"
+    # For 4+: Preserve start and end, stars in middle
     return f"{value[0]}{'*' * (length - 2)}{value[-1]}"
 
 
@@ -623,23 +610,24 @@ def main():
     # --- 0. Focus Summary (Bannered) ---
     summary_text = meta.get("focus_summary_text", "")
     if summary_text:
-        # --- Dynamically mask tickers in the summary ---
+        # --- Dynamically mask tickers in the summary using SINGLE PASS to avoid ghost stars ---
         all_tickers = set()
         for item in data.get("table_view_model", []):
             if item.get("ticker"): all_tickers.add(item["ticker"])
         for item in data.get("focus_view_model", []):
             if item.get("ticker"): all_tickers.add(item["ticker"])
         
-        # Sort by length descending to prevent substring substitution issues (e.g. AAPL vs AAP)
         if all_tickers:
-            for t in sorted(all_tickers, key=len, reverse=True):
-                # Replace whole words matching the ticker using word boundaries
-                summary_text = re.sub(
-                    rf"\b{re.escape(t)}\b", 
-                    mask_ticker(t), 
-                    summary_text, 
-                    flags=re.IGNORECASE
-                )
+            # Sort by length descending for regex priority
+            sorted_tickers = sorted(all_tickers, key=len, reverse=True)
+            pattern = "|".join(re.escape(t) for t in sorted_tickers)
+            # Single-pass substitution using a lambda to prevent masking a mask
+            summary_text = re.sub(
+                rf"\b({pattern})\b", 
+                lambda m: mask_ticker(m.group(0)), 
+                summary_text, 
+                flags=re.IGNORECASE
+            )
         
         # --- Remove the strategy link from the summary (Public View Safety) ---
         summary_text = re.sub(r"\n📊 Full strategy view & live metrics: https://.*", "", summary_text)
