@@ -166,20 +166,13 @@ def render_mobile_cards(df):
         tech_line = f"RSI {rsi_val} · Vol {vol_val}x · {trend_str}"
 
         # Earnings: 2024-04-25 · Hold: 45d
-        earning = row.get('earnings', '-')
+        earning = format_us_date(row.get('earnings', '-'))
         streak = row.get('hold_streak_days', '-')
         stats_line = f"Earn: {earning} · Hold: {streak}d"
         
         # Picked Date Formatting (Shorten: 2024-01-15 -> 01/15/24)
         pick_raw = row.get('picked_date', '')
-        pick_display = ""
-        if pick_raw:
-             try:
-                 # Try parse YYYY-MM-DD
-                 d_obj = datetime.strptime(str(pick_raw).strip(), "%Y-%m-%d")
-                 pick_display = d_obj.strftime("%m/%d/%y")
-             except:
-                 pick_display = str(pick_raw)
+        pick_display = format_us_date(pick_raw)
 
         # --- Render Card (Native) ---
         with st.container(border=True):
@@ -296,9 +289,39 @@ def mask_ticker(ticker: str) -> str:
     return f"{value[0]}{'*' * (length - 2)}{value[-1]}"
 
 
+def format_us_date(date_str: str) -> str:
+    """Formats a date string (with or without icon prefixes) to US MM/DD/YY format."""
+    if not date_str or str(date_str).strip() in ('', 'N/A', 'TBD', 'None'):
+        return str(date_str) if str(date_str) != 'None' else ''
+    
+    date_str = str(date_str).strip()
+    
+    # Try to extract an icon prefix + standard YYYY-MM-DD
+    # E.g., "⚠️ 2024-04-25" or "2024-04-25"
+    match = re.search(r'(.*?)\s*(\d{4}-\d{2}-\d{2})(.*)', date_str)
+    
+    if match:
+        prefix = match.group(1).strip()
+        raw_date = match.group(2)
+        suffix = match.group(3).strip()
+        
+        try:
+            d_obj = datetime.strptime(raw_date, "%Y-%m-%d")
+            formatted = d_obj.strftime("%m/%d/%y")
+            
+            # Reassemble
+            parts = []
+            if prefix: parts.append(prefix)
+            parts.append(formatted)
+            if suffix: parts.append(suffix)
+            
+            return " ".join(parts)
+        except ValueError:
+            pass
+            
+    return date_str
+
 def safe_float(value):
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return None
     if isinstance(value, (int, float)):
         return float(value)
     if isinstance(value, str):
@@ -793,6 +816,12 @@ def main():
             'quant_rating_emoji', 'value_grade', 'growth_grade',
             'profitability_grade', 'momentum_grade', 'eps_revisions_grade'
         ]
+
+        # Process Picked and Earnings formats for US Standard
+        if 'picked_date' in df.columns:
+            df['picked_date'] = df['picked_date'].apply(format_us_date)
+        if 'earnings_fmt' in df.columns:
+            df['earnings_fmt'] = df['earnings_fmt'].apply(format_us_date)
 
         final_display = df.reindex(columns=expected_cols).rename(columns={
             'quant_rating_emoji': 'quant',
