@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updated_at": "2026-03-20 16:59:31",
+    "updated_at": "2026-03-20 17:13:11",
     "updated_at_tz": "America/New_York",
     "focus_message": "",
     "focus_summary_text": "\ud83d\udd25 Weekly AP Quant Radar \u2014 Technical Focus List\n\n[AP-Clock]:\n\u2022 $PPC 169/180 (rem 11d)\n[Earnings in 2W]:\n\u2022 $AGX  ER in 6d  (2026-03-26)\n\u2022 $CCL  ER in 7d  (2026-03-27)\n\n[ \ud83d\udcc9 BREAKDOWNS (Below 200-SMA) ]\n\u2022 $CCL | EVENT+NEWS+DVG | -15.9% | Vol 1.6x | ER in 7d\n\u2022 $UBER | NEWS+BD200 | -15.6% | Vol 0.7x | Uber expands robotaxi push with Nvidia and Rivian deals\n\u2022 $B | NEWS+DVG+BD200 | -19.3% | Vol 1.8x | Barrick paid its Q4 dividend on March 16\n\u2022 $NEM | NEWS+DVG+BD200 | -15.0% | Vol 1.3x | Gold plunge pressures Newmont shares\n\u2022 $WLDN | NEWS+DVG+BD200 | -21.7% | Vol 0.8x | No qualifying 7-day earnings, rating, M&A, or regulatory catalyst found\n\u2022 $SKYW | NEWS+BD200 | -15.2% | Vol 2.8x | No qualifying 7-day earnings, rating, M&A, or regulatory catalyst found\n\u2022 $OKTA | NEWS+BD200 | -12.3% | Vol 1.1x | No qualifying 7-day earnings, rating, M&A, or regulatory catalyst found\n\u2022 $CRDO | NEWS+DVG+BD200 | -20.1% | Vol 0.8x | No qualifying 7-day earnings, rating, M&A, or regulatory catalyst found\n\n\ud83c\udfaf Triggers: OKTA > 78.95 (EMA21) | UBER > 74.93 (EMA21) | SKYW > 94.56 (EMA21)",
@@ -19,18 +19,18 @@
       "news_headline": "Carnival set to report Q1 results on March 27",
       "news_age": "1d",
       "news_sources": 2,
-      "news_summary": "\u516c\u53f8\u5c06\u57283\u670827\u65e5\u53d1\u5e03\u4e00\u5b63\u5ea6\u4e1a\u7ee9\uff0c\u4e14\u8fd1\u671f\u5e02\u573a\u5df2\u5f00\u59cb\u56f4\u7ed5\u8d22\u62a5\u4e0e\u677f\u5757\u6210\u672c\u538b\u529b\u63d0\u524d\u4ea4\u6613\u3002",
+      "news_summary": "The company is scheduled to report first-quarter results on March 27, and the market is already repricing the name into the event window.",
       "reason": "",
       "logic_pillars": {
-        "technical": "\u4ef7\u683c\u660e\u663e\u4f4e\u4e8e SMA200\u3001EMA55 \u548c EMA21\uff0c\u7ed3\u6784\u4ecd\u662f\u6807\u51c6\u4e0b\u884c\u8d8b\u52bf\uff0c\u5f53\u524d\u5c5e\u4e8e\u4e8b\u4ef6\u524d\u7684\u5f31\u52bf\u6574\u7406\u3002",
-        "volume_analysis": "RVOL20=1.62\uff0c\u8bf4\u660e\u653e\u91cf\u53c2\u4e0e\u5ea6\u663e\u8457\u9ad8\u4e8e\u5747\u503c\uff0c\u5e02\u573a\u6b63\u5728\u63d0\u524d\u4e3a\u8d22\u62a5\u7a97\u53e3\u91cd\u65b0\u5b9a\u4ef7\u3002",
-        "news_catalyst": "\u8fd1\u7aef\u6838\u5fc3\u9a71\u52a8\u662f3\u670827\u65e5\u8d22\u62a5\uff0c\u4e14\u98ce\u9669\u504f\u597d\u4e0b\u964d\u5bf9\u53ef\u9009\u6d88\u8d39\u94fe\u6761\u4e0d\u53cb\u597d\u3002"
+        "technical": "Price is clearly below SMA200, EMA55, and EMA21, so the structure remains a standard downtrend into a near-term event.",
+        "volume_analysis": "RVOL20=1.62 shows participation well above normal and suggests the market is actively positioning ahead of earnings.",
+        "news_catalyst": "The main near-term driver is the March 27 earnings event, while the broader risk-off regime is also unfavorable for consumer discretionary names."
       },
       "divergence": {
         "is_divergent": true,
-        "note": "SA Overall \u4e3a Buy\uff0c\u4f46\u4ef7\u683c\u4f4d\u4e8e SMA200 \u4e0b\u65b9\u4e14\u4f34\u968f\u653e\u91cf\uff0c\u5b58\u5728\u8bc4\u7ea7\u4e0e\u6280\u672f\u7ed3\u6784\u80cc\u79bb\u3002"
+        "note": "SA Overall is Buy, but price remains below SMA200 and the setup is still technically broken."
       },
-      "action_plan": "\u8d22\u62a5\u524d\u4fdd\u6301\u89c2\u671b\uff0c\u82e5\u65e5\u6536\u76d8\u65e0\u6cd5\u6536\u590d EMA21 (26.84) \u5219\u4e0d\u8003\u8651\u52a0\u4ed3\u3002",
+      "action_plan": "Stay on watch ahead of earnings; if daily closes cannot reclaim EMA21 (26.84), do not add.",
       "break_confirm_days": 1.0,
       "trigger_count": 5,
       "primary_trigger_key": "BREAK_SMA200",
@@ -77,18 +77,18 @@
       "news_headline": "Uber expands robotaxi push with Nvidia and Rivian deals",
       "news_age": "1d",
       "news_sources": 2,
-      "news_summary": "\u8fc7\u53bb\u4e00\u5468 Uber \u8fde\u7eed\u516c\u5e03\u81ea\u52a8\u9a7e\u9a76\u5408\u4f5c\uff0c\u5148\u4e0e Nvidia \u63a8\u8fdb robotaxi \u6269\u5f20\uff0c\u53c8\u4e0e Rivian \u8fbe\u6210\u5927\u989d\u5408\u4f5c\uff0c\u4f46\u80a1\u4ef7\u7ed3\u6784\u4ecd\u672a\u5b8c\u6210\u4fee\u590d\u3002",
+      "news_summary": "Uber announced fresh autonomous-driving partnerships over the past week, but the stock has not yet completed a technical repair.",
       "reason": "",
       "logic_pillars": {
-        "technical": "\u4ef7\u683c\u4ecd\u4f4e\u4e8e SMA200 \u4e0e EMA55\uff0c\u4f46\u8ddd\u79bb EMA21 \u4ec5 -1.4%\uff0c\u5c5e\u4e8e\u65e9\u671f\u4fee\u590d\u6d4b\u8bd5\u4f4d\u3002",
-        "volume_analysis": "RVOL20=0.75\uff0c\u8bf4\u660e\u5229\u597d\u5e76\u672a\u5f97\u5230\u653e\u91cf\u786e\u8ba4\uff0c\u4fee\u590d\u8d28\u91cf\u4ecd\u504f\u5f31\u3002",
-        "news_catalyst": "\u81ea\u52a8\u9a7e\u9a76\u5408\u4f5c\u5c5e\u4e8e\u9ad8\u8d28\u91cf\u6b63\u9762\u50ac\u5316\uff0c\u4f46\u5f53\u524d\u66f4\u591a\u4f53\u73b0\u4e3a\u6d88\u606f\u4e0e\u4ef7\u683c\u7684\u80cc\u79bb\u3002"
+        "technical": "Price remains below SMA200 and EMA55, but the gap to EMA21 is only -1.4%, so this is an early repair test rather than a confirmed reversal.",
+        "volume_analysis": "RVOL20=0.75 shows weak confirmation, meaning the positive news flow has not yet attracted strong tape sponsorship.",
+        "news_catalyst": "The robotaxi partnership developments are material positive catalysts, but they are not yet validated by price structure."
       },
       "divergence": {
         "is_divergent": true,
-        "note": "\u6b63\u9762\u516c\u53f8\u7ea7\u50ac\u5316\u4e0e\u4ecd\u5904\u4e8e SMA200 \u4e0b\u65b9\u7684\u6280\u672f\u7ed3\u6784\u5f62\u6210\u660e\u663e\u80cc\u79bb\u3002"
+        "note": "Fresh positive company-specific news conflicts with price still being below SMA200 and EMA55."
       },
-      "action_plan": "\u7ee7\u7eed\u89c2\u671b\uff0c\u53ea\u6709\u65e5\u6536\u76d8\u7ad9\u4e0a EMA55 (77.49) \u540e\u624d\u53ef\u89c6\u4e3a\u66f4\u9ad8\u8d28\u91cf\u4fee\u590d\u3002",
+      "action_plan": "Keep it on watch; only a daily close above EMA55 (77.49) would materially improve the repair quality.",
       "break_confirm_days": 1.0,
       "trigger_count": 3,
       "primary_trigger_key": "BREAK_SMA200",
@@ -135,18 +135,18 @@
       "news_headline": "Barrick paid its Q4 dividend on March 16",
       "news_age": "4d",
       "news_sources": 1,
-      "news_summary": "\u516c\u53f8\u5b98\u7f51\u62ab\u9732 Q4 2025 \u80a1\u606f\u5df2\u4e8e 3 \u6708 16 \u65e5\u652f\u4ed8\uff0c\u4f46\u4ef7\u683c\u5e76\u672a\u501f\u6b64\u5f62\u6210\u4fee\u590d\uff0c\u53cd\u800c\u4ecd\u5904\u6df1\u5ea6\u5747\u7ebf\u4e0b\u65b9\u3002",
+      "news_summary": "The company completed its dividend payment on March 16, but the stock has not translated that into technical repair.",
       "reason": "",
       "logic_pillars": {
-        "technical": "\u4ef7\u683c\u4f4e\u4e8e SMA200\u3001EMA55\u3001EMA21\uff0c\u4e14 SMA200 \u504f\u79bb\u8fbe\u5230 -19.3%\uff0c\u6280\u672f\u7ed3\u6784\u4ecd\u5c5e\u91cd\u5ea6\u53d7\u635f\u3002",
-        "volume_analysis": "RVOL20=1.78\uff0c\u8bf4\u660e\u5f53\u524d\u5e76\u975e\u65e0\u91cf\u9634\u8dcc\uff0c\u800c\u662f\u6709\u660e\u663e\u8d44\u91d1\u6362\u624b\u4e0e\u518d\u5b9a\u4ef7\u884c\u4e3a\u3002",
-        "news_catalyst": "\u80a1\u606f\u4e8b\u4ef6\u672c\u8eab\u504f\u4e2d\u6027\u504f\u6b63\uff0c\u4f46\u5c1a\u672a\u6539\u53d8\u5f53\u524d\u5f31\u7ed3\u6784\u3002"
+        "technical": "Price remains below SMA200, EMA55, and EMA21, with a -19.3% SMA200 bias that still reflects heavily damaged structure.",
+        "volume_analysis": "RVOL20=1.78 confirms that the move is active and not just a low-volume drift lower.",
+        "news_catalyst": "The dividend event is mildly supportive, but it has not changed the broader weak technical setup."
       },
       "divergence": {
         "is_divergent": true,
-        "note": "SA Overall \u4e3a Strong Buy\uff0c\u4f46\u4ef7\u683c\u4ecd\u5927\u5e45\u4f4d\u4e8e SMA200 \u4e0b\u65b9\uff0c\u5c5e\u4e8e\u5178\u578b\u8bc4\u7ea7-\u4ef7\u683c\u80cc\u79bb\u3002"
+        "note": "SA Overall is Strong Buy, but price is still materially below SMA200, creating a clear rating-price divergence."
       },
-      "action_plan": "\u5148\u89c2\u5bdf\u662f\u5426\u80fd\u591f\u6536\u590d EMA21 (44.04)\uff0c\u5728\u6b64\u4e4b\u524d\u4ec5\u4fdd\u7559\u89c2\u5bdf\uff0c\u4e0d\u505a\u79ef\u6781\u52a0\u4ed3\u5224\u65ad\u3002",
+      "action_plan": "Watch for a reclaim of EMA21 (44.04); until then, treat this as a divergence watch rather than an add setup.",
       "break_confirm_days": 1.0,
       "trigger_count": 4,
       "primary_trigger_key": "BREAK_SMA200",
@@ -193,18 +193,18 @@
       "news_headline": "Gold plunge pressures Newmont shares",
       "news_age": "1d",
       "news_sources": 1,
-      "news_summary": "\u91d1\u4ef7\u51fa\u73b0\u663e\u8457\u56de\u843d\uff0c\u8d35\u91d1\u5c5e\u77ff\u5546\u627f\u538b\uff0cNewmont \u88ab\u70b9\u540d\u4e3a\u53d7\u5f71\u54cd\u4e2a\u80a1\u4e4b\u4e00\u3002",
+      "news_summary": "A sharp move lower in gold has pressured the miners, with Newmont directly exposed to the negative commodity backdrop.",
       "reason": "",
       "logic_pillars": {
-        "technical": "\u4ef7\u683c\u4f4d\u4e8e\u5168\u90e8\u5173\u952e\u5747\u7ebf\u4e0b\u65b9\uff0c\u4e14 EMA21 \u4e0e EMA55 \u5747\u8fdc\u9ad8\u4e8e\u73b0\u4ef7\uff0c\u4fee\u590d\u95e8\u69db\u8f83\u9ad8\u3002",
-        "volume_analysis": "RVOL20=1.29\uff0c\u8bf4\u660e\u5f53\u524d\u8dcc\u52bf\u4f34\u968f\u6709\u6548\u53c2\u4e0e\u5ea6\uff0c\u4e0d\u662f\u5355\u7eaf\u6d41\u52a8\u6027\u584c\u9677\u3002",
-        "news_catalyst": "\u8fd1\u7aef\u538b\u529b\u6765\u81ea\u91d1\u4ef7\u6025\u8dcc\uff0c\u5bf9\u77ff\u5546\u76c8\u5229\u9884\u671f\u4e0e\u677f\u5757\u60c5\u7eea\u5747\u6784\u6210\u62d6\u7d2f\u3002"
+        "technical": "Price sits below all major moving averages, and both EMA21 and EMA55 are far above current levels, so the repair hurdle is high.",
+        "volume_analysis": "RVOL20=1.29 confirms meaningful participation in the decline and argues against dismissing the move as noise.",
+        "news_catalyst": "The fresh driver is gold-price weakness, which is directly relevant to near-term miner sentiment."
       },
       "divergence": {
         "is_divergent": true,
-        "note": "SA Overall \u4e3a Strong Buy\uff0c\u4f46\u6280\u672f\u9762\u5904\u4e8e\u660e\u786e\u4e0b\u884c\u901a\u9053\uff0c\u4e14\u65b0\u8fd1\u5546\u54c1\u4ef7\u683c\u6d88\u606f\u504f\u8d1f\u9762\u3002"
+        "note": "SA Overall is Strong Buy, but the stock remains in a clear downtrend and is facing fresh commodity-related pressure."
       },
-      "action_plan": "\u5728\u4ef7\u683c\u91cd\u65b0\u7ad9\u4e0a EMA21 (113.02) \u4e4b\u524d\u4e0d\u8003\u8651\u5de6\u4fa7\u8fdb\u573a\uff0c\u66f4\u5f3a\u786e\u8ba4\u9700\u7ad9\u4e0a EMA55 (113.13)\u3002",
+      "action_plan": "Do not consider new entries until price reclaims EMA21 (113.02); stronger repair would require EMA55 (113.13).",
       "break_confirm_days": 1.0,
       "trigger_count": 4,
       "primary_trigger_key": "BREAK_SMA200",
@@ -251,18 +251,18 @@
       "news_headline": "No qualifying 7-day earnings, rating, M&A, or regulatory catalyst found",
       "news_age": "n/a",
       "news_sources": 0,
-      "news_summary": "\u5728\u8981\u6c42\u7684\u65f6\u95f4\u7a97\u53e3\u5185\u672a\u627e\u5230\u8db3\u591f\u9ad8\u8d28\u91cf\u3001\u53ef\u91c7\u7eb3\u7684\u516c\u53f8\u7ea7\u65b0\u9c9c\u50ac\u5316\uff0c\u5f53\u524d\u66f4\u591a\u662f\u6280\u672f\u9762\u4e3b\u5bfc\u3002",
+      "news_summary": "No sufficiently high-quality company-specific catalyst was found in the required window, so the case remains primarily technical.",
       "reason": "",
       "logic_pillars": {
-        "technical": "SMA200 \u504f\u79bb -21.7%\uff0c\u662f\u672c\u7ec4\u4e2d\u6700\u6df1\u7684\u7834\u4f4d\u4e4b\u4e00\uff0c\u4ef7\u683c\u540c\u65f6\u4f4e\u4e8e EMA55 \u4e0e EMA21\u3002",
-        "volume_analysis": "RVOL20=0.79\uff0c\u8bf4\u660e\u7f3a\u4e4f\u6709\u529b\u627f\u63a5\uff0c\u5f53\u524d\u4f4d\u7f6e\u5c1a\u672a\u770b\u5230\u9ad8\u8d28\u91cf\u62a2\u4fee\u590d\u8ff9\u8c61\u3002",
-        "news_catalyst": "\u6ca1\u6709\u9ad8\u8d28\u91cf\u53ef\u91c7\u7eb3\u7684\u65b0\u9c9c\u50ac\u5316\uff0c\u56e0\u6b64\u5f53\u524d\u5224\u65ad\u4ee5\u6280\u672f\u7834\u4f4d\u4f18\u5148\u3002"
+        "technical": "The SMA200 bias is -21.7%, among the deepest in the set, and price remains below EMA55 and EMA21.",
+        "volume_analysis": "RVOL20=0.79 indicates weak sponsorship and no meaningful bottom-fishing confirmation yet.",
+        "news_catalyst": "No qualifying fresh catalyst was found, so the signal remains dominated by the broken chart."
       },
       "divergence": {
         "is_divergent": true,
-        "note": "SA Overall \u4e3a Buy\uff0c\u4f46\u4ef7\u683c\u7ed3\u6784\u4e25\u91cd\u53d7\u635f\u4e14\u7f3a\u4e4f\u91cf\u80fd\u4fee\u590d\u3002"
+        "note": "SA Overall is Buy, but the technical structure is severely damaged and lacks volume-based repair."
       },
-      "action_plan": "\u7ee7\u7eed\u56de\u907f\uff0c\u81f3\u5c11\u9700\u5148\u6536\u590d EMA21 (88.06) \u624d\u80fd\u89c6\u4f5c\u521d\u6b65\u4fee\u590d\u5c1d\u8bd5\u3002",
+      "action_plan": "Continue to avoid until price can at least reclaim EMA21 (88.06) as an initial repair step.",
       "break_confirm_days": 1.0,
       "trigger_count": 4,
       "primary_trigger_key": "BREAK_SMA200",
@@ -309,18 +309,18 @@
       "news_headline": "No qualifying 7-day earnings, rating, M&A, or regulatory catalyst found",
       "news_age": "n/a",
       "news_sources": 0,
-      "news_summary": "\u5728\u8981\u6c42\u7a97\u53e3\u5185\u672a\u627e\u5230\u8db3\u591f\u9ad8\u8d28\u91cf\u7684\u516c\u53f8\u7ea7\u65b0\u9c9c\u50ac\u5316\uff0c\u5f53\u524d\u8b66\u62a5\u4e3b\u8981\u6765\u81ea\u5f02\u5e38\u6210\u4ea4\u91cf\u3002",
+      "news_summary": "No sufficiently high-quality company-specific catalyst was found in the required window, so the alert is mainly volume-driven.",
       "reason": "",
       "logic_pillars": {
-        "technical": "\u4ef7\u683c\u4ecd\u4f4d\u4e8e SMA200\u3001EMA55 \u4e0e EMA21 \u4e0b\u65b9\uff0c\u5c1a\u672a\u5f62\u6210\u8d8b\u52bf\u4fee\u590d\u7ed3\u6784\u3002",
-        "volume_analysis": "RVOL20=2.78\uff0c\u4e3a\u6837\u672c\u4e2d\u6700\u9ad8\uff0c\u8db3\u4ee5\u5c06\u5176\u5217\u4e3a\u5178\u578b volume alert\u3002",
-        "news_catalyst": "\u7f3a\u5c11\u9ad8\u8d28\u91cf\u65b0\u9c9c\u50ac\u5316\uff0c\u56e0\u6b64\u4e3b\u8981\u89c6\u4e3a\u653e\u91cf\u5f02\u52a8\u800c\u975e\u6d88\u606f\u9a71\u52a8\u578b\u53cd\u8f6c\u3002"
+        "technical": "Price remains below SMA200, EMA55, and EMA21, so no trend repair is visible yet.",
+        "volume_analysis": "RVOL20=2.78 is the highest in the group and clearly qualifies as a strong volume alert.",
+        "news_catalyst": "Without a qualifying fresh catalyst, this is best treated as a pure abnormal-volume watch."
       },
       "divergence": {
         "is_divergent": false,
-        "note": "\u5f53\u524d\u66f4\u50cf\u7eaf\u91cf\u80fd\u5f02\u5e38\u8b66\u62a5\uff0c\u800c\u975e\u8bc4\u7ea7\u6216\u65b0\u95fb\u4e0e\u4ef7\u683c\u7684\u5f3a\u80cc\u79bb\u3002"
+        "note": "This is primarily a volume anomaly rather than a strong rating-news-price divergence case."
       },
-      "action_plan": "\u5148\u89c2\u5bdf\u662f\u5426\u80fd\u591f\u91cd\u65b0\u7ad9\u4e0a EMA21 (94.56)\uff0c\u5426\u5219\u4ecd\u6309\u9ad8\u6ce2\u52a8\u4e0b\u7684\u5f31\u7ed3\u6784\u5904\u7406\u3002",
+      "action_plan": "Watch for a reclaim of EMA21 (94.56); otherwise keep treating it as a high-volatility weak-structure setup.",
       "break_confirm_days": 1.0,
       "trigger_count": 5,
       "primary_trigger_key": "BREAK_SMA200",
@@ -367,18 +367,18 @@
       "news_headline": "No qualifying 7-day earnings, rating, M&A, or regulatory catalyst found",
       "news_age": "n/a",
       "news_sources": 0,
-      "news_summary": "\u8981\u6c42\u7a97\u53e3\u5185\u672a\u627e\u5230\u65b0\u7684\u5408\u683c\u50ac\u5316\uff0c\u5f53\u524d\u66f4\u591a\u662f\u6280\u672f\u4f4d\u535a\u5f08\u3002",
+      "news_summary": "No qualifying fresh catalyst was found in the required window, so this remains mainly a technical watch.",
       "reason": "",
       "logic_pillars": {
-        "technical": "\u4ef7\u683c\u8ddd EMA21 \u4ec5 -0.7%\uff0c\u6ee1\u8db3 NEAR_EMA21 \u6761\u4ef6\uff0c\u4f46\u4ecd\u4f4d\u4e8e SMA200 \u4e0e EMA55 \u4e0b\u65b9\u3002",
-        "volume_analysis": "RVOL20=1.08\uff0c\u63a5\u8fd1\u5e38\u6001\uff0c\u8bf4\u660e\u5f53\u524d\u65b9\u5411\u9009\u62e9\u5c1a\u672a\u83b7\u5f97\u660e\u663e\u91cf\u80fd\u786e\u8ba4\u3002",
-        "news_catalyst": "\u7f3a\u4e4f\u65b0\u9c9c\u4e8b\u4ef6\uff0c\u5f53\u524d\u4e3b\u8981\u662f\u5747\u7ebf\u9644\u8fd1\u7684\u6280\u672f\u535a\u5f08\u3002"
+        "technical": "Price is only -0.7% from EMA21, which satisfies the NEAR_EMA21 rule, but it is still below SMA200 and EMA55.",
+        "volume_analysis": "RVOL20=1.08 is close to normal and does not provide strong directional confirmation.",
+        "news_catalyst": "With no fresh event, this setup is mostly about technical behavior around the short-term average."
       },
       "divergence": {
         "is_divergent": false,
-        "note": "\u6ca1\u6709\u5f3a\u70c8\u7684\u8bc4\u7ea7/\u65b0\u95fb/\u4ef7\u683c\u80cc\u79bb\uff0c\u5c5e\u4e8e\u4e2d\u6027\u504f\u5f31\u7684\u89c2\u5bdf\u578b\u6807\u7684\u3002"
+        "note": "There is no strong rating-news-price divergence here; this is a neutral-to-weak monitoring case."
       },
-      "action_plan": "\u89c2\u5bdf\u65e5\u6536\u76d8\u80fd\u5426\u7ad9\u7a33 EMA21 (78.95)\uff0c\u82e5\u6210\u529f\u5219\u4e0b\u4e00\u89c2\u5bdf\u4f4d\u4e3a EMA55 (81.90)\u3002",
+      "action_plan": "Watch for a daily close above EMA21 (78.95); if that happens, the next reference line is EMA55 (81.90).",
       "break_confirm_days": 1.0,
       "trigger_count": 3,
       "primary_trigger_key": "BREAK_SMA200",
@@ -425,18 +425,18 @@
       "news_headline": "No qualifying 7-day earnings, rating, M&A, or regulatory catalyst found",
       "news_age": "n/a",
       "news_sources": 0,
-      "news_summary": "\u5728\u6307\u5b9a\u7a97\u53e3\u5185\u672a\u627e\u5230\u5408\u683c\u65b0\u9c9c\u50ac\u5316\uff0c\u5f53\u524d\u4e3b\u8981\u7531\u6280\u672f\u7ed3\u6784\u4e0e\u4f30\u503c\u9884\u671f\u80cc\u79bb\u9a71\u52a8\u3002",
+      "news_summary": "No qualifying fresh catalyst was found in the required window, so the case is still driven by technical damage and rating divergence.",
       "reason": "",
       "logic_pillars": {
-        "technical": "\u4ef7\u683c\u6df1\u5ea6\u4f4d\u4e8e SMA200\u3001EMA55\u3001EMA21 \u4e0b\u65b9\uff0cSMA200 \u504f\u79bb\u8fbe\u5230 -20.1%\u3002",
-        "volume_analysis": "RVOL20=0.80\uff0c\u663e\u793a\u5f53\u524d\u4f4d\u7f6e\u5e76\u672a\u51fa\u73b0\u660e\u663e\u589e\u91cf\u8d44\u91d1\u53bb\u786e\u8ba4\u53cd\u8f6c\u3002",
-        "news_catalyst": "\u65e0\u65b0\u9c9c\u50ac\u5316\uff0c\u5f53\u524d\u66f4\u50cf\u7eaf\u6280\u672f\u6027\u5931\u8861\u540e\u7684\u89c2\u5bdf\u6807\u7684\u3002"
+        "technical": "Price is deeply below SMA200, EMA55, and EMA21, with a -20.1% SMA200 bias.",
+        "volume_analysis": "RVOL20=0.80 shows no clear increase in participation that would confirm a repair attempt.",
+        "news_catalyst": "With no fresh catalyst, this remains a technical imbalance watch rather than a news-driven setup."
       },
       "divergence": {
         "is_divergent": true,
-        "note": "SA Overall \u4e3a Strong Buy\uff0c\u4f46\u80a1\u4ef7\u4ecd\u5904\u4e8e\u660e\u786e\u4e0b\u964d\u8d8b\u52bf\uff0c\u6784\u6210\u5178\u578b\u80cc\u79bb\u3002"
+        "note": "SA Overall is Strong Buy, but the stock remains in a confirmed downtrend, creating a classic divergence case."
       },
-      "action_plan": "\u5148\u7b49\u5f85\u4ef7\u683c\u6536\u590d EMA21 (112.62)\uff0c\u66f4\u5f3a\u4fee\u590d\u786e\u8ba4\u4f4d\u5728 EMA55 (123.01)\u3002",
+      "action_plan": "Wait for price to reclaim EMA21 (112.62); stronger repair confirmation would require EMA55 (123.01).",
       "break_confirm_days": 1.0,
       "trigger_count": 4,
       "primary_trigger_key": "BREAK_SMA200",
